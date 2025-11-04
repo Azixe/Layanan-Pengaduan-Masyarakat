@@ -1,9 +1,0 @@
-Image Placeholders for LaporDesa Landing Page
-==============================================
-
-Required images:
-1. village-illustration.png (450x300px) - Hero section village illustration
-2. dashboard-mockup.png (600x400px) - Real-time dashboard preview
-3. nlp-visualization.png (600x400px) - NLP network visualization
-
-You can replace these placeholders with actual images of the same dimensions.
