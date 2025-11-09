@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Aspirasi Desa</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <!-- Admin Styles -->
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/table.css">
+</head>
+<body class="admin-layout">
+    <!-- Sidebar Component -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i style="font-size: 1.5rem; color: #0066CC;"class="fa-solid fa-city"></i>
+                <span>Aspirasi Desa</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active">
+                <i class="fa-solid fa-border-all"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#submissions" class="nav-item">
+                <i class="fa-solid fa-table-list"></i>
+                <span>All Submissions</span>
+            </a>
+
+            <a href="#reports" class="nav-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="#add-new" class="nav-item">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Add New</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#settings" class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">AD</div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin Desa</div>
+                    <div class="profile-role">Administrator</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar Component -->
+        <header class="top-bar">
+            <h1 class="page-title">Dashboard</h1>
+            
+            <div class="top-bar-actions">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search submissions...">
+                </div>
+
+                <button class="notification-btn">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <button class="btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    Add New Submission
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards Component -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total Submissions</span>
+                <div class="stat-value">1,234</div>
+            </div>
+
+            <div class="stat-card stat-pending">
+                <span class="stat-label">Pending</span>
+                <div class="stat-value">56</div>
+            </div>
+
+            <div class="stat-card stat-progress">
+                <span class="stat-label">In Progress</span>
+                <div class="stat-value">12</div>
+            </div>
+
+            <div class="stat-card stat-resolved">
+                <span class="stat-label">Resolved</span>
+                <div class="stat-value">1,166</div>
+            </div>
+        </section>
+
+        <!-- Submissions Table Component -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>All Submissions</h2>
+                
+                <div class="section-filters">
+                    <select class="filter-select">
+                        <option>All Status</option>
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Resolved</option>
+                    </select>
+
+                    <select class="filter-select">
+                        <option>All Types</option>
+                        <option>Complaint</option>
+                        <option>Aspiration</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Date Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionsTable">
+                        <tr>
+                            <td><a href="#" class="id-link">#8214</a></td>
+                            <td>Perbaikan Jalan Rusak</td>
+                            <td>Complaint</td>
+                            <td><span class="badge badge-resolved">Resolved</span></td>
+                            <td>2023-10-26</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8213</a></td>
+                            <td>Lampu Jalan Mati</td>
+                            <td>Complaint</td>
+                            <td><span class="badge badge-progress">In Progress</span></td>
+                            <td>2023-10-25</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8212</a></td>
+                            <td>Ide Festival Desa</td>
+                            <td>Aspiration</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>2023-10-25</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8211</a></td>
+                            <td>Masalah Keamanan Lingkungan</td>
+                            <td>Complaint</td>
+                            <td><span class="badge badge-resolved">Resolved</span></td>
+                            <td>2023-10-24</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8210</a></td>
+                            <td>Sampah Tidak Diangkut</td>
+                            <td>Complaint</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>2023-10-23</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8209</a></td>
+                            <td>Program Pelatihan Pemuda</td>
+                            <td>Aspiration</td>
+                            <td><span class="badge badge-resolved">Resolved</span></td>
+                            <td>2023-10-22</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#" class="id-link">#8208</a></td>
+                            <td>Pengadaan Air Bersih</td>
+                            <td>Complaint</td>
+                            <td><span class="badge badge-progress">In Progress</span></td>
+                            <td>2023-10-21</td>
+                            <td><a href="#" class="action-link">View</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <div class="table-info">
+                    Showing 1 to 7 of 1,234 entries
+                </div>
+                <div class="pagination">
+                    <button class="pagination-btn" disabled>Previous</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">...</button>
+                    <button class="pagination-btn">176</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

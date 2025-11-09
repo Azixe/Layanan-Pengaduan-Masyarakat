@@ -1,0 +1,104 @@
+/* Sidebar */
+.sidebar {
+    background: white;
+    border-right: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Navigation */
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: #666;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.nav-item i {
+    width: 20px;
+    font-size: 1.1rem;
+}
+
+.nav-item:hover {
+    background: #f8f9fa;
+    color: var(--text-dark);
+}
+
+.nav-item.active {
+    background: #e3f2fd;
+    color: var(--primary-color);
+    border-right: 3px solid var(--primary-color);
+}
+
+/* Footer */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid #e8e8e8;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.profile-role {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* Mobile */
+@media (max-width: 1024px) {
+    .sidebar {
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+}
