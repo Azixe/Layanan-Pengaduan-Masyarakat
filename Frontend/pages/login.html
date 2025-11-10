@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login eLapor</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card" role="main">
+            <h1 class="title">Selamat Datang</h1>
+            <p class="subtitle">Silahkan Login untuk Membuat Laporan</p>
+
+            <form id="loginForm" novalidate>
+                <div class="field">
+                    <label for="user">Email</label>
+                    <input type="text" id="user" name="user" placeholder="masukan email" required>
+                    <small class="error" id="userError" aria-live="polite"></small>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="password" name="password" placeholder="masukan password" required>
+                        <button type="button" class="toggle" id="togglePwd" aria-label="Show password">Show</button>
+                    </div>
+                    <small class="error" id="passwordError" aria-live="polite"></small>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Masuk</button>
+
+                <div class="links">
+                    <a href="#" id="forgot">Lupa Password?</a>
+                    <span class="dot">•</span>
+                    <a href="signup.html" id="signup">Daftar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+
+</html>

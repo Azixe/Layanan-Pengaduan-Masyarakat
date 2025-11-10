@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daftar eLapor</title>
+    <link rel="stylesheet" href="../css/form.css">
+    <!-- fallback to login.css if form.css doesn't style everything -->
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card" role="main">
+            <h1 class="title">Buat Akun</h1>
+            <p class="subtitle">Silahkan isi data untuk mendaftar</p>
+
+            <form id="signupForm" novalidate>
+                <div class="field">
+                    <label for="name">Nama</label>
+                    <input type="text" id="name" name="name" placeholder="Masukan nama lengkap" required>
+                    <small class="error" id="nameError" aria-live="polite"></small>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="masukan email" required>
+                    <small class="error" id="emailError" aria-live="polite"></small>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="masukan password" required>
+                    <small class="error" id="passwordError" aria-live="polite"></small>
+                </div>
+
+                <div class="field">
+                    <label for="confirmPassword">Konfirmasi Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="konfirmasi password"
+                        required>
+                    <small class="error" id="confirmError" aria-live="polite"></small>
+                </div>
+
+                <button type="submit" class="btn" id="submitSignup">Daftar</button>
+
+                <div class="links">
+                    <a href="login.html" id="backToLogin">Kembali ke Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/signup.js"></script>
+</body>
+
+</html>

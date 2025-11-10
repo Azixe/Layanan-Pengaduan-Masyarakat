@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Laporan - LaporDesa</title>
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <!-- Component Styles -->
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <!-- Form Styles -->
+    <link rel="stylesheet" href="../css/form.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="container">
+            <div class="form-header">
+                <h1>Sampaikan Aspirasi atau Pengaduan Anda</h1>
+                <p>Isi formulir di bawah ini dengan lengkap dan jelas agar kami dapat memproses laporan Anda dengan cepat dan tepat.</p>
+            </div>
+
+            <form id="submissionForm" class="submission-form">
+                <!-- Judul Laporan -->
+                <div class="form-group">
+                    <label for="title">Judul Laporan <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        placeholder="Ketik judul laporan Anda"
+                        required
+                    >
+                </div>
+
+                <!-- Deskripsi Lengkap -->
+                <div class="form-group">
+                    <label for="description">Deskripsi Lengkap <span class="required">*</span></label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        rows="6"
+                        placeholder="Jelaskan secara rinci apa yang terjadi, di mana, kapan, dan siapa saja yang terlibat."
+                        required
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span> / 1000 karakter
+                    </div>
+                </div>
+
+                <!-- Pilih Kategori -->
+                <div class="form-group">
+                    <label for="category">Pilih Kategori <span class="required">*</span></label>
+                    <select id="category" name="category" required>
+                        <option value="">Pilih jenis laporan Anda</option>
+                        <option value="complaint">Pengaduan (Complaint)</option>
+                        <option value="aspiration">Aspirasi (Aspiration)</option>
+                        <option value="suggestion">Saran (Suggestion)</option>
+                        <option value="appreciation">Apresiasi (Appreciation)</option>
+                    </select>
+                </div>
+
+                <!-- Lokasi -->
+                <div class="form-group">
+                    <label for="location">Lokasi Kejadian</label>
+                    <input 
+                        type="text" 
+                        id="location" 
+                        name="location" 
+                        placeholder="Contoh: Jl. Merdeka No. 10, Desa Sukamaju"
+                    >
+                </div>
+
+                <!-- Lampirkan File -->
+                <div class="form-group">
+                    <label for="fileUpload">Lampirkan File (Opsional)</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p class="upload-text">Klik untuk unggah atau seret dan lepas</p>
+                        <p class="upload-hint">PNG, JPG, PDF (MAX. 5MB)</p>
+                        <input 
+                            type="file" 
+                            id="fileUpload" 
+                            name="file" 
+                            accept=".png,.jpg,.jpeg,.pdf"
+                            hidden
+                        >
+                    </div>
+                    <div id="filePreview" class="file-preview"></div>
+                </div>
+
+                <!-- Informasi Kontak -->
+                <div class="form-section-header">
+                    <h3>Informasi Kontak (Opsional)</h3>
+                    <p>Berikan informasi kontak Anda jika ingin dihubungi untuk tindak lanjut</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            placeholder="Nama Anda"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="email@example.com"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="08xxxxxxxxxx"
+                    >
+                </div>
+
+                <!-- Privacy Notice -->
+                <div class="privacy-notice">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <p>Laporan Anda akan diproses oleh sistem cerdas kami untuk memastikan penanganan yang lebih cepat dan akurat.</p>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">Batal</button>
+                    <button type="submit" class="btn-primary btn-large">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Kirim Laporan
+                    </button>
+                </div>
+
+                <!-- Privacy Link -->
+                <div class="form-footer">
+                    <p>Dengan mengirimkan laporan ini, Anda menyetujui <a href="#privacy">Kebijakan Privasi</a> kami.</p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Scripts -->
+    <script src="../js/script.js"></script>
+    <script src="../js/form.js"></script>
+</body>
+</html>
