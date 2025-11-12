@@ -67,4 +67,16 @@ const registerUser = async (req, res) => {
     }
 }
 
-export{loginUser,registerUser}
+const getProfile = async (req, res) => {
+    try {
+        res.json({
+            success: true,
+            message: "Data profil berhasil diambil",
+            data: req.user
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Terjadi kesalahan server" });
+    }
+};
+
+export{loginUser,registerUser,getProfile};

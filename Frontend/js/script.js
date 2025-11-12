@@ -1,4 +1,6 @@
 // Load Header and Footer Components
+const tokenExist = localStorage.getItem('token');
+
 async function loadComponent(elementId, componentPath) {
     try {
         const response = await fetch(componentPath);
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Initialize other features
     initializeAnimations();
+
+    initLaporanButton();
 });
 
 // Mobile Navigation Toggle
@@ -86,19 +90,21 @@ function initializeAnimations() {
 }
 
 // Button click handlers (placeholders for future functionality)
-const ctaButtons = document.querySelectorAll('.btn-primary');
 
-ctaButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        // Don't follow the link if it's inside an anchor tag
-        if (button.textContent.includes('Laporan')) {
-            e.preventDefault();
-            // Here you would typically open a form modal or navigate to a form page
-            console.log('Opening report form...');
-            alert('Fitur pembuatan laporan akan segera tersedia!');
-        }
-    });
-});
+
+function initLaporanButton() {
+    const applyButtonLapor = document.getElementById('Laporan');
+    applyButtonLapor.addEventListener('click', (e) => {
+            // Don't follow the link if it's inside an anchor tag
+                if (!tokenExist) {
+                    window.location.href = 'pages/login.html';
+                    alert("Login/Register terlebih dahulu");
+                } else {
+                    window.location.href = 'pages/submit.html';
+                }
+        });
+}
+
 
 // Navbar background change on scroll
 window.addEventListener('scroll', () => {
