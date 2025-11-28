@@ -19,6 +19,7 @@ const laporanSchema = new mongoose.Schema({
     },
     komentar:{type:String},
     kategori:{type:String},
+    kategori_ai:{type:String},
     sentimen_ai:{type:String},
     keywords_ai:{type:[String]},
     createdAt:{type:Date,default:Date.now}
