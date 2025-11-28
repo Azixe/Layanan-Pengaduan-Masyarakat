@@ -42,6 +42,15 @@ async function loadComponents() {
     }
 }
 
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    loadComponents();
+    setupCharCounter();
+    setupFileUpload();
+    setupFormSubmit();
+    setupCancelButton();
+});
+
 // Character counter for description textarea
 function setupCharCounter() {
     const textarea = document.getElementById('description');
@@ -65,7 +74,7 @@ function setupCharCounter() {
 // File upload functionality
 function setupFileUpload() {
     const uploadArea = document.querySelector('.file-upload-area');
-    const fileInput = document.getElementById('file-upload');
+    const fileInput = document.getElementById('fileUpload');
     const previewContainer = document.querySelector('.file-preview');
     
     let uploadedFiles = [];
@@ -213,63 +222,92 @@ function validateForm() {
 
 // Form submission
 function setupFormSubmit() {
-    const form = document.getElementById('submission-form');
+    const form = document.getElementById('submissionForm'); // Pastikan ID form di HTML 'submissionForm'
     const submitBtn = document.querySelector('.btn-primary');
     
+    // Pastikan element form ada
+    if (!form) return;
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         if (!validateForm()) {
             return;
         }
-        
-        // Get form data
+
+        // --- CEK LOGIN USER ---
+        // Asumsi: Saat login berhasil, kamu simpan ID di localStorage
+        const wargaID = localStorage.getItem('user_id'); 
+        if (!wargaID) {
+            showError("Sesi habis. Silakan login kembali.");
+            window.location.href = '/login.html'; // Redirect jika perlu
+            return;
+        }
+
+        // --- PERSIAPAN DATA ---
         const formData = new FormData();
-        formData.append('title', document.getElementById('title').value.trim());
-        formData.append('description', document.getElementById('description').value.trim());
-        formData.append('category', document.getElementById('category').value);
-        formData.append('location', document.getElementById('location').value.trim());
-        formData.append('contactName', document.getElementById('contact-name').value.trim());
-        formData.append('contactEmail', document.getElementById('contact-email').value.trim());
-        formData.append('contactPhone', document.getElementById('contact-phone').value.trim());
         
-        // Add files
+        // 1. ID User (Wajib untuk Backend)
+        formData.append('warga_id', wargaID);
+
+        // 2. Judul, Deskripsi dan Kategori
+        const title = document.getElementById('title').value.trim();
+        const desc = document.getElementById('description').value.trim();
+        const category = document.getElementById('category').value;
+        formData.append('deskripsi', desc);
+        formData.append('judul', title);
+        formData.append('kategori', category);
+
+        // 3. Lokasi Teks & Koordinat GPS
+        const lokasi = document.getElementById('location').value.trim();
+        formData.append('lokasi', lokasi);
+
+        // 4. File Gambar
+        // Backend mengharapkan field bernama 'upload_foto' (sesuai Multer)
         const files = window.getUploadedFiles();
-        files.forEach(file => {
-            formData.append('files', file);
-        });
-        
-        // Show loading state
-        submitBtn.classList.add('loading');
+        if (files.length > 0) {
+            formData.append('upload_foto', files[0]); // Ambil file pertama saja
+        }
+
+        // --- UI LOADING ---
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
         submitBtn.disabled = true;
         form.classList.add('form-loading');
         
         try {
-            // TODO: Replace with actual API endpoint
-            // const response = await fetch('/api/submissions', {
-            //     method: 'POST',
-            //     body: formData
-            // });
+            // --- KIRIM KE BACKEND ---
+            // Ganti URL sesuai port backend Node.js kamu
+            const response = await fetch(`http://localhost:3000/api/laporan/buatlaporan`, {
+                method: 'POST',
+                body: formData 
+                // JANGAN set Content-Type header manual saat pakai FormData!
+            });
             
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // Show success message
-            showSuccess('Laporan berhasil dikirim! Tim kami akan segera meninjau laporan Anda.');
-            
-            // Reset form after 2 seconds
-            setTimeout(() => {
-                form.reset();
-                document.querySelector('.file-preview').innerHTML = '';
-                document.querySelector('.char-count').textContent = '0/1000';
-                window.history.back();
-            }, 2000);
+            const result = await response.json();
+
+            if (response.ok) {
+                // SUKSES
+                showSuccess(`Laporan Terkirim! Tiket: ${result.nomor_laporan || 'OK'}`);
+                
+                // Reset form setelah 2 detik
+                setTimeout(() => {
+                    form.reset();
+                    document.querySelector('.file-preview').innerHTML = '';
+                    document.querySelector('.char-count').textContent = '0/1000';
+                    window.location.href = '/index.html'; // Redirect ke dashboard
+                }, 2000);
+            } else {
+                // ERROR DARI SERVER
+                throw new Error(result.message || "Gagal memproses di server.");
+            }
             
         } catch (error) {
             console.error('Error submitting form:', error);
-            showError('Terjadi kesalahan saat mengirim laporan. Silakan coba lagi.');
+            showError(`Gagal mengirim: ${error.message}`);
         } finally {
-            submitBtn.classList.remove('loading');
+            // RESET TOMBOL
+            submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;
             form.classList.remove('form-loading');
         }
@@ -376,11 +414,4 @@ function showSuccess(message) {
     }, 4000);
 }
 
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    loadComponents();
-    setupCharCounter();
-    setupFileUpload();
-    setupFormSubmit();
-    setupCancelButton();
-});
+

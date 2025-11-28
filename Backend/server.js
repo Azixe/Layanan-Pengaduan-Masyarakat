@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
 import wargaRouter from "./routes/wargaRoute.js"
+import laporanRouter from "./routes/laporanRoute.js"
 import 'dotenv/config'
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -22,6 +23,7 @@ connectDB();
 
 //API endpoint
 app.use("/api/warga",wargaRouter)
+app.use("/api/laporan", laporanRouter)
 
 app.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, '../Frontend/index.html'));

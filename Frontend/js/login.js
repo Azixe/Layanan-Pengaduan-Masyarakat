@@ -78,6 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if(data.success) {
             localStorage.setItem("token", data.token);
+            if (data.warga && data.warga._id) {
+                    localStorage.setItem("user_id", data.warga._id);
+                } else {
+                    console.warn("Backend tidak mengirim data.warga._id!");
+                }
+            console.log("ISI DATA USER:", data.warga);
             alert("Login berhasil");
             window.location.href = "../index.html";
         } else {
