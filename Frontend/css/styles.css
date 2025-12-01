@@ -297,3 +297,152 @@
         font-size: 1.75rem;
     }
 }
+
+/* ===================================
+   Panduan / Guide Section
+   =================================== */
+.panduan {
+    padding: 5rem 0;
+    background: linear-gradient(180deg, #f6fbff 0%, #ffffff 40%);
+}
+
+.panduan h2 {
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.panduan .section-subtitle {
+    text-align: center;
+    color: var(--text-gray);
+    margin-bottom: 2rem;
+}
+
+.panduan-tabs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0 3rem 0;
+}
+
+.panduan .tab {
+    border: 2px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    padding: 0.9rem 1.4rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+}
+
+.panduan .tab.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.guide-card {
+    position: relative;
+    background: white;
+    padding: 2.5rem 1.75rem 1.75rem 1.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-sm);
+    min-height: 260px;
+}
+
+.guide-card h3 {
+    margin-top: 0.4rem;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+}
+
+.guide-card p {
+    color: var(--text-gray);
+    margin-bottom: 0.6rem;
+}
+
+.guide-card ul {
+    color: var(--text-gray);
+    line-height: 1.7;
+    margin-left: 1rem;
+}
+
+.number-badge {
+    position: absolute;
+    top: -18px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    box-shadow: var(--shadow-sm);
+}
+
+.tips-box {
+    margin-top: 3rem;
+    padding: 1.8rem;
+    background: #fff6ea;
+    border: 1px solid rgba(245, 166, 35, 0.25);
+    border-radius: 10px;
+}
+
+.tips-box h3 {
+    color: #e08b00;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.tip-item h4 {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+.tip-item p {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 1024px) {
+    .guide-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tips-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .panduan-tabs {
+        flex-wrap: wrap;
+    }
+
+    .guide-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
