@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <!-- Form Styles -->
     <link rel="stylesheet" href="../css/form.css">
 </head>
+
 <body>
     <!-- Header Component -->
     <div id="header-placeholder"></div>
@@ -21,32 +23,23 @@
         <div class="container">
             <div class="form-header">
                 <h1>Sampaikan Aspirasi atau Pengaduan Anda</h1>
-                <p>Isi formulir di bawah ini dengan lengkap dan jelas agar kami dapat memproses laporan Anda dengan cepat dan tepat.</p>
+                <p>Isi formulir di bawah ini dengan lengkap dan jelas agar kami dapat memproses laporan Anda dengan
+                    cepat dan tepat.</p>
             </div>
 
             <form id="submissionForm" class="submission-form">
                 <!-- Judul Laporan -->
                 <div class="form-group">
                     <label for="title">Judul Laporan <span class="required">*</span></label>
-                    <input 
-                        type="text" 
-                        id="title" 
-                        name="title" 
-                        placeholder="Ketik judul laporan Anda"
-                        required
-                    >
+                    <input type="text" id="title" name="title" placeholder="Ketik judul laporan Anda" required>
                 </div>
 
                 <!-- Deskripsi Lengkap -->
                 <div class="form-group">
                     <label for="description">Deskripsi Lengkap <span class="required">*</span></label>
-                    <textarea 
-                        id="description" 
-                        name="description" 
-                        rows="6"
+                    <textarea id="description" name="description" rows="6"
                         placeholder="Jelaskan secara rinci apa yang terjadi, di mana, kapan, dan siapa saja yang terlibat."
-                        required
-                    ></textarea>
+                        required></textarea>
                     <div class="char-count">
                         <span id="charCount">0</span> / 1000 karakter
                     </div>
@@ -67,12 +60,8 @@
                 <!-- Lokasi -->
                 <div class="form-group">
                     <label for="location">Lokasi Kejadian</label>
-                    <input 
-                        type="text" 
-                        id="location" 
-                        name="location" 
-                        placeholder="Contoh: Jl. Merdeka No. 10, Desa Sukamaju"
-                    >
+                    <input type="text" id="location" name="location"
+                        placeholder="Contoh: Jl. Merdeka No. 10, Desa Sukamaju">
                 </div>
 
                 <!-- Lampirkan File -->
@@ -82,13 +71,7 @@
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <p class="upload-text">Klik untuk unggah atau seret dan lepas</p>
                         <p class="upload-hint">PNG, JPG, PDF (MAX. 5MB)</p>
-                        <input 
-                            type="file" 
-                            id="fileUpload" 
-                            name="file" 
-                            accept=".png,.jpg,.jpeg,.pdf"
-                            hidden
-                        >
+                        <input type="file" id="fileUpload" name="file" accept=".png,.jpg,.jpeg,.pdf" hidden>
                     </div>
                     <div id="filePreview" class="file-preview"></div>
                 </div>
@@ -102,39 +85,25 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Nama Lengkap</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            placeholder="Nama Anda"
-                        >
+                        <input type="text" id="name" name="name" placeholder="Nama Anda">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            placeholder="email@example.com"
-                        >
+                        <input type="email" id="email" name="email" placeholder="email@example.com">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="phone">Nomor Telepon</label>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        name="phone" 
-                        placeholder="08xxxxxxxxxx"
-                    >
+                    <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx">
                 </div>
 
                 <!-- Privacy Notice -->
                 <div class="privacy-notice">
                     <i class="fa-solid fa-shield-halved"></i>
-                    <p>Laporan Anda akan diproses oleh sistem cerdas kami untuk memastikan penanganan yang lebih cepat dan akurat.</p>
+                    <p>Laporan Anda akan diproses oleh sistem cerdas kami untuk memastikan penanganan yang lebih cepat
+                        dan akurat.</p>
                 </div>
 
                 <!-- Form Actions -->
@@ -148,7 +117,8 @@
 
                 <!-- Privacy Link -->
                 <div class="form-footer">
-                    <p>Dengan mengirimkan laporan ini, Anda menyetujui <a href="#privacy">Kebijakan Privasi</a> kami.</p>
+                    <p>Dengan mengirimkan laporan ini, Anda menyetujui <a href="#privacy">Kebijakan Privasi</a> kami.
+                    </p>
                 </div>
             </form>
         </div>
@@ -160,7 +130,65 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Scripts -->
-    <script src="../js/script.js"></script>
+    <script>
+        // Load Header and Footer Components for submit page
+        async function loadComponent(elementId, componentPath) {
+            try {
+                const response = await fetch(componentPath);
+                const html = await response.text();
+                document.getElementById(elementId).innerHTML = html;
+            } catch (error) {
+                console.error(`Error loading component ${componentPath}:`, error);
+            }
+        }
+
+        // Load components and setup navigation
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadComponent('header-placeholder', '../components/header.html');
+            await loadComponent('footer-placeholder', '../components/footer.html');
+
+            // Fix navigation links to go back to index page
+            setTimeout(() => {
+                const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    // Kontak tetap di halaman submit (scroll ke footer)
+                    if (href === '#kontak') {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const footer = document.querySelector('footer') || document.getElementById('footer-placeholder');
+                            if (footer) {
+                                footer.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
+                    } else {
+                        // Link lain kembali ke index page
+                        link.setAttribute('href', '../index.html' + href);
+                    }
+                });
+
+                // Fix "Buat Laporan" button to reload current page
+                const createReportBtn = document.getElementById('buatLaporanBtn');
+                if (createReportBtn) {
+                    createReportBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.reload();
+                    });
+                }
+
+                // Mobile menu toggle
+                const hamburger = document.getElementById('hamburger');
+                const navLinksContainer = document.querySelector('.nav-links');
+                if (hamburger && navLinksContainer) {
+                    hamburger.addEventListener('click', () => {
+                        navLinksContainer.classList.toggle('active');
+                        hamburger.classList.toggle('active');
+                    });
+                }
+            }, 100);
+        });
+    </script>
     <script src="../js/form.js"></script>
 </body>
+
 </html>

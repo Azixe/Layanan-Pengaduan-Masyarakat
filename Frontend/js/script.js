@@ -15,14 +15,15 @@ async function loadComponent(elementId, componentPath) {
 document.addEventListener('DOMContentLoaded', async () => {
     await loadComponent('header-placeholder', 'components/header.html');
     await loadComponent('footer-placeholder', 'components/footer.html');
-    
+
     // Initialize navigation after header is loaded
     initializeNavigation();
-    
+
     // Initialize other features
     initializeAnimations();
 
     initLaporanButton();
+    initHeaderLaporanButton();
 });
 
 // Mobile Navigation Toggle
@@ -80,7 +81,7 @@ function initializeAnimations() {
 
     // Observe elements for animation
     const animatedElements = document.querySelectorAll('.feature-card, .preview-item, .testimonial-card');
-    
+
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -96,23 +97,39 @@ function initLaporanButton() {
     const applyButtonLapor = document.getElementById('Laporan');
     const applyButtonLapor1 = document.getElementById('Laporan1');
     applyButtonLapor.addEventListener('click', (e) => {
-            // Don't follow the link if it's inside an anchor tag
-                if (!tokenExist) {
-                    window.location.href = 'pages/login.html';
-                    alert("Login/Register terlebih dahulu");
-                } else {
-                    window.location.href = 'pages/submit.html';
-                }
-        });
+        // Don't follow the link if it's inside an anchor tag
+        if (!tokenExist) {
+            window.location.href = 'pages/login.html';
+            alert("Login/Register terlebih dahulu");
+        } else {
+            window.location.href = 'pages/submit.html';
+        }
+    });
     applyButtonLapor1.addEventListener('click', (e) => {
-            // Don't follow the link if it's inside an anchor tag
-                if (!tokenExist) {
-                    window.location.href = 'pages/login.html';
-                    alert("Login/Register terlebih dahulu");
-                } else {
-                    window.location.href = 'pages/submit.html';
-                }
+        // Don't follow the link if it's inside an anchor tag
+        if (!tokenExist) {
+            window.location.href = 'pages/login.html';
+            alert("Login/Register terlebih dahulu");
+        } else {
+            window.location.href = 'pages/submit.html';
+        }
+    });
+}
+
+// Initialize header "Buat Laporan" button
+function initHeaderLaporanButton() {
+    const headerLaporanBtn = document.getElementById('buatLaporanBtn');
+    if (headerLaporanBtn) {
+        headerLaporanBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!tokenExist) {
+                window.location.href = 'pages/login.html';
+                alert("Login/Register terlebih dahulu");
+            } else {
+                window.location.href = 'pages/submit.html';
+            }
         });
+    }
 }
 
 
@@ -129,12 +146,12 @@ window.addEventListener('scroll', () => {
 // Add hover effect to chart bars
 document.addEventListener('DOMContentLoaded', () => {
     const chartBars = document.querySelectorAll('.chart-bar');
-    
+
     chartBars.forEach(bar => {
         bar.addEventListener('mouseenter', () => {
             bar.style.opacity = '0.8';
         });
-        
+
         bar.addEventListener('mouseleave', () => {
             bar.style.opacity = '1';
         });
@@ -155,7 +172,7 @@ window.addEventListener('scroll', () => {
 function animateCounter(element, target, duration = 2000) {
     let start = 0;
     const increment = target / (duration / 16);
-    
+
     const timer = setInterval(() => {
         start += increment;
         if (start >= target) {

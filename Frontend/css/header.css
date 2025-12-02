@@ -21,6 +21,12 @@
     font-weight: 700;
     font-size: 1.25rem;
     color: var(--text-dark);
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.logo:hover {
+    opacity: 0.8;
 }
 
 .logo svg {
