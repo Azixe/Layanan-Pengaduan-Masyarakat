@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loginUser(e) {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
@@ -65,34 +65,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = userInput.value;
         const password = passwordInput.value;
 
-        try{
+        try {
             const response = await fetch(`http://localhost:3000/api/warga/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email:email, password:password})
-        });
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email, password: password })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if(data.success) {
-            localStorage.setItem("token", data.token);
-            if (data.warga && data.warga._id) {
+            if (data.success) {
+                localStorage.setItem("token", data.token);
+                if (data.warga && data.warga._id) {
                     localStorage.setItem("user_id", data.warga._id);
+                    localStorage.setItem("user_name", data.warga.user_warga);
                 } else {
                     console.warn("Backend tidak mengirim data.warga._id!");
                 }
-            console.log("ISI DATA USER:", data.warga);
-            alert("Login berhasil");
-            window.location.href = "../index.html";
-        } else {
-            alert('Login gagal ' + data.message);
-        }
+                console.log("ISI DATA USER:", data.warga);
+                alert("Login berhasil");
+                window.location.href = "../index.html";
+            } else {
+                alert('Login gagal ' + data.message);
+            }
         } catch (error) {
             console.error("Fetch error", error);
             alert("Terjadi kesalahan. Silahkan coba lagi nanti.");
         }
-        
+
     }
 });

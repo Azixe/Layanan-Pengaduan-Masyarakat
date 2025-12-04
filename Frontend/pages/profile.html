@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Profil - LaporDesa</title>
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <!-- Component Styles -->
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <!-- Profile Styles -->
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-header">
+                <h1>Pengaturan Profil</h1>
+                <p>Kelola informasi pribadi Anda</p>
+            </div>
+
+            <div class="profile-container">
+                <!-- Profile Form -->
+                <div class="profile-form-section">
+                    <div class="profile-info-header">
+                        <div class="avatar-small">
+                            <i class="fa-solid fa-user-circle"></i>
+                        </div>
+                        <div class="user-info">
+                            <h2 id="displayName">Loading...</h2>
+                            <p id="displayEmail">Loading...</p>
+                        </div>
+                    </div>
+                    <form id="profileForm" class="profile-form">
+                        <!-- Nama Lengkap -->
+                        <div class="form-group">
+                            <label for="user_warga">Nama Lengkap <span class="required">*</span></label>
+                            <input type="text" id="user_warga" name="user_warga"
+                                placeholder="Masukkan nama lengkap Anda" required>
+                            <small class="error-message" id="nameError"></small>
+                        </div>
+
+                        <!-- Email (Read-only) -->
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="email@example.com" readonly
+                                disabled>
+                            <small class="form-hint">Email tidak dapat diubah</small>
+                        </div>
+
+                        <!-- Alamat -->
+                        <div class="form-group">
+                            <label for="alamat">Alamat Lengkap</label>
+                            <textarea id="alamat" name="alamat" rows="3"
+                                placeholder="Masukkan alamat lengkap Anda"></textarea>
+                            <small class="error-message" id="alamatError"></small>
+                        </div>
+
+                        <!-- Nomor Telepon -->
+                        <div class="form-group">
+                            <label for="no_hp">Nomor Telepon</label>
+                            <input type="tel" id="no_hp" name="no_hp" placeholder="08xxxxxxxxxx">
+                            <small class="error-message" id="phoneError"></small>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="window.history.back()">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                Kembali
+                            </button>
+                            <button type="submit" class="btn-primary btn-large">
+                                <i class="fa-solid fa-save"></i>
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Scripts -->
+    <script src="../js/profile.js"></script>
+</body>
+
+</html>

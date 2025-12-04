@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize navigation after header is loaded
     initializeNavigation();
 
+    // Show user menu if logged in
+    initializeUserMenu();
+
     // Initialize other features
     initializeAnimations();
 
@@ -130,6 +133,59 @@ function initHeaderLaporanButton() {
             }
         });
     }
+}
+
+// Initialize user menu and logout
+function initializeUserMenu() {
+    setTimeout(() => {
+        const token = localStorage.getItem('token');
+        const userMenu = document.getElementById('userMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const profileLink = document.getElementById('profileLink');
+
+        if (token && userMenu) {
+            // Show user menu
+            userMenu.style.display = 'block';
+
+            // Set profile link path based on current page
+            if (profileLink) {
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/pages/')) {
+                    profileLink.href = 'profile.html';
+                } else {
+                    profileLink.href = 'pages/profile.html';
+                }
+            }
+
+            // Load user name if available
+            const userName = localStorage.getItem('user_name');
+            if (userName) {
+                const userNameSpan = document.getElementById('userName');
+                if (userNameSpan) {
+                    userNameSpan.textContent = userName;
+                }
+            }
+
+            // Handle logout
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('Apakah Anda yakin ingin keluar?')) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user_id');
+                        localStorage.removeItem('user_name');
+                        // Redirect based on current location
+                        const currentPath = window.location.pathname;
+                        if (currentPath.includes('/pages/')) {
+                            window.location.href = '../index.html';
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }
+                });
+            }
+        }
+    }, 100);
 }
 
 

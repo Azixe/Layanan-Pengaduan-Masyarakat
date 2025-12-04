@@ -76,29 +76,6 @@
                     <div id="filePreview" class="file-preview"></div>
                 </div>
 
-                <!-- Informasi Kontak -->
-                <div class="form-section-header">
-                    <h3>Informasi Kontak (Opsional)</h3>
-                    <p>Berikan informasi kontak Anda jika ingin dihubungi untuk tindak lanjut</p>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Nama Lengkap</label>
-                        <input type="text" id="name" name="name" placeholder="Nama Anda">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="email@example.com">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Nomor Telepon</label>
-                    <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx">
-                </div>
-
                 <!-- Privacy Notice -->
                 <div class="privacy-notice">
                     <i class="fa-solid fa-shield-halved"></i>
@@ -130,64 +107,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Scripts -->
-    <script>
-        // Load Header and Footer Components for submit page
-        async function loadComponent(elementId, componentPath) {
-            try {
-                const response = await fetch(componentPath);
-                const html = await response.text();
-                document.getElementById(elementId).innerHTML = html;
-            } catch (error) {
-                console.error(`Error loading component ${componentPath}:`, error);
-            }
-        }
-
-        // Load components and setup navigation
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadComponent('header-placeholder', '../components/header.html');
-            await loadComponent('footer-placeholder', '../components/footer.html');
-
-            // Fix navigation links to go back to index page
-            setTimeout(() => {
-                const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-                navLinks.forEach(link => {
-                    const href = link.getAttribute('href');
-                    // Kontak tetap di halaman submit (scroll ke footer)
-                    if (href === '#kontak') {
-                        link.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            const footer = document.querySelector('footer') || document.getElementById('footer-placeholder');
-                            if (footer) {
-                                footer.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        });
-                    } else {
-                        // Link lain kembali ke index page
-                        link.setAttribute('href', '../index.html' + href);
-                    }
-                });
-
-                // Fix "Buat Laporan" button to reload current page
-                const createReportBtn = document.getElementById('buatLaporanBtn');
-                if (createReportBtn) {
-                    createReportBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        window.location.reload();
-                    });
-                }
-
-                // Mobile menu toggle
-                const hamburger = document.getElementById('hamburger');
-                const navLinksContainer = document.querySelector('.nav-links');
-                if (hamburger && navLinksContainer) {
-                    hamburger.addEventListener('click', () => {
-                        navLinksContainer.classList.toggle('active');
-                        hamburger.classList.toggle('active');
-                    });
-                }
-            }, 100);
-        });
-    </script>
     <script src="../js/form.js"></script>
 </body>
 
