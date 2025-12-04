@@ -6,6 +6,8 @@
     <title>Dashboard - Admin Aspirasi Desa</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Base Styles -->
     <link rel="stylesheet" href="../Frontend/css/base.css">
     <!-- Admin Styles -->
@@ -28,21 +30,6 @@
             <a href="#dashboard" class="nav-item active">
                 <i class="fa-solid fa-border-all"></i>
                 <span>Dashboard</span>
-            </a>
-
-            <a href="#submissions" class="nav-item">
-                <i class="fa-solid fa-table-list"></i>
-                <span>All Submissions</span>
-            </a>
-
-            <a href="#reports" class="nav-item">
-                <i class="fa-solid fa-chart-line"></i>
-                <span>Reports</span>
-            </a>
-
-            <a href="#add-new" class="nav-item">
-                <i class="fa-solid fa-circle-plus"></i>
-                <span>Add New</span>
             </a>
         </nav>
 
@@ -78,11 +65,6 @@
                     <i class="fa-solid fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </button>
-
-                <button class="btn-primary">
-                    <i class="fa-solid fa-plus"></i>
-                    Add New Submission
-                </button>
             </div>
         </header>
 
@@ -106,6 +88,41 @@
             <div class="stat-card stat-resolved">
                 <span class="stat-label">Resolved</span>
                 <div class="stat-value">1,166</div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Submission Categories</h3>
+                    <div class="date-filter">
+                        <input type="date" id="startDate" class="date-input">
+                        <span>to</span>
+                        <input type="date" id="endDate" class="date-input">
+                        <button class="btn-filter" onclick="updateCharts()">
+                            <i class="fa-solid fa-filter"></i>
+                            Apply
+                        </button>
+                    </div>
+                </div>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Status Distribution</h3>
+                    </div>
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Monthly Trends</h3>
+                    </div>
+                    <canvas id="trendChart"></canvas>
+                </div>
             </div>
         </section>
 
@@ -218,8 +235,10 @@
                 </div>
             </div>
         </section>
-    </main>
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
 
     <script src="js/admin.js"></script>
+    <script src="js/charts.js"></script>
 </body>
 </html>

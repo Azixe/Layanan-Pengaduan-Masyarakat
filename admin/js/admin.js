@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initFilters();
     initPagination();
     initClickHandlers();
+    initCharts();
+    initDateFilters();
 });
 
 // Sidebar & Mobile Menu
