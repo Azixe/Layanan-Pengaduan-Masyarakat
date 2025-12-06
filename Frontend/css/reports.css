@@ -718,16 +718,6 @@
     gap: 0.5rem;
 }
 
-.btn-primary {
-    background: #667eea;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #5568d3;
-    transform: translateY(-2px);
-}
-
 .btn-secondary {
     background: #f0f0f0;
     color: #333;
