@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pengaduan - Sistem Pengaduan Masyarakat</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/reports.css">
+</head>
+
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="reports-container">
+        <section class="reports-hero">
+            <div class="container">
+                <h1>Daftar Pengaduan Masyarakat</h1>
+                <p class="hero-subtitle">Transparansi dan Akuntabilitas Pelayanan Publik</p>
+            </div>
+        </section>
+
+        <section class="reports-content">
+            <div class="container">
+                <!-- Filters Section -->
+                <div class="filters-card">
+                    <h2><i class="fa-solid fa-filter"></i> Filter Pencarian</h2>
+                    <div class="filters-grid">
+                        <div class="filter-item">
+                            <label for="searchInput">
+                                <i class="fa-solid fa-magnifying-glass"></i> Cari Laporan
+                            </label>
+                            <input type="text" id="searchInput" placeholder="Cari judul atau deskripsi...">
+                        </div>
+
+                        <div class="filter-item">
+                            <label for="filterKategori">
+                                <i class="fa-solid fa-tag"></i> Kategori
+                            </label>
+                            <select id="filterKategori">
+                                <option value="">Semua Kategori</option>
+                                <option value="Infrastruktur">Infrastruktur</option>
+                                <option value="Kebersihan">Kebersihan</option>
+                                <option value="Keamanan">Keamanan</option>
+                                <option value="Kesehatan">Kesehatan</option>
+                                <option value="Pendidikan">Pendidikan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label for="filterStatus">
+                                <i class="fa-solid fa-circle-check"></i> Status
+                            </label>
+                            <select id="filterStatus">
+                                <option value="">Semua Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label for="filterSort">
+                                <i class="fa-solid fa-sort"></i> Urutkan
+                            </label>
+                            <select id="filterSort">
+                                <option value="createdAt-desc">Terbaru</option>
+                                <option value="createdAt-asc">Terlama</option>
+                                <option value="judul-asc">Judul A-Z</option>
+                                <option value="judul-desc">Judul Z-A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button id="btnApplyFilter" class="btn btn-primary">
+                            <i class="fa-solid fa-check"></i> Terapkan Filter
+                        </button>
+                        <button id="btnResetFilter" class="btn btn-secondary">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-row">
+                    <div class="stat-card stat-total">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <div class="stat-info">
+                            <h3 id="statTotal">0</h3>
+                            <p>Total Laporan</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-pending">
+                        <i class="fa-solid fa-clock"></i>
+                        <div class="stat-info">
+                            <h3 id="statPending">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-progress">
+                        <i class="fa-solid fa-spinner"></i>
+                        <div class="stat-info">
+                            <h3 id="statProgress">0</h3>
+                            <p>In Progress</p>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-completed">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <div class="stat-info">
+                            <h3 id="statCompleted">0</h3>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports List -->
+                <div class="reports-list" id="reportsList">
+                    <!-- Loading State -->
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>Memuat data laporan...</p>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer">
+                    <!-- Pagination will be rendered here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Detail Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-file-lines"></i> Detail Laporan</h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detail content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../js/reports.js"></script>
+</body>
+
+</html>
