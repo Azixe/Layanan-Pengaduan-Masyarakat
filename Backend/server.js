@@ -17,6 +17,7 @@ app.use(cors())
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, '../Frontend')));
+app.use(express.static(path.join(__dirname, '../admin')));
 
 // db connection
 connectDB();
@@ -29,6 +30,11 @@ app.get("/", (req,res) => {
     res.sendFile(path.join(__dirname, '../Frontend/index.html'));
 })
 
+app.get("/admin", (req,res) => {
+    res.sendFile(path.join(__dirname, '../admin/index.html'));
+})
+
 app.listen(port, () => {
-    console.log(`Server Started on http://localhost:${port}`)
+    console.log(`Server Started on http://localhost:${port} for User Server`)
+    console.log(`Server Started on http://localhost:${port}/admin for Admin Server`)
 })
