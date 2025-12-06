@@ -44,6 +44,12 @@ function setupNavigation() {
             }
         });
 
+        // Fix "Daftar Pengaduan" link path
+        const reportsLink = document.querySelector('.nav-links a[href*="reports.html"]');
+        if (reportsLink) {
+            reportsLink.setAttribute('href', 'reports.html');
+        }
+
         // Fix "Buat Laporan" button to reload current page
         const createReportBtn = document.getElementById('buatLaporanBtn');
         if (createReportBtn) {
