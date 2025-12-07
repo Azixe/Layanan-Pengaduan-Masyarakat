@@ -117,16 +117,13 @@ function initClickHandlers() {
         });
     });
     
-    // Table Actions
+    // Table Actions - ID links
     document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('action-link')) {
-            e.preventDefault();
-            const id = e.target.closest('tr').cells[0].textContent;
-            alert(`Viewing details for ${id}`);
-        }
         if (e.target.classList.contains('id-link')) {
             e.preventDefault();
-            alert(`Opening submission ${e.target.textContent}`);
+            // Extract ID and call viewReport
+            const reportId = e.target.textContent.replace('#', '');
+            viewReport(reportId);
         }
     });
 }

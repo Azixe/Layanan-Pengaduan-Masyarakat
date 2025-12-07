@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/report-modal.css">
 </head>
 <body class="admin-layout">
     <!-- Sidebar Component -->
@@ -171,7 +172,7 @@
                             <td>Complaint</td>
                             <td><span class="badge badge-resolved">Resolved</span></td>
                             <td>2023-10-26</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8214'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8213</a></td>
@@ -179,7 +180,7 @@
                             <td>Complaint</td>
                             <td><span class="badge badge-progress">In Progress</span></td>
                             <td>2023-10-25</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8213'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8212</a></td>
@@ -187,7 +188,7 @@
                             <td>Aspiration</td>
                             <td><span class="badge badge-pending">Pending</span></td>
                             <td>2023-10-25</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8212'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8211</a></td>
@@ -195,7 +196,7 @@
                             <td>Complaint</td>
                             <td><span class="badge badge-resolved">Resolved</span></td>
                             <td>2023-10-24</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8211'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8210</a></td>
@@ -203,7 +204,7 @@
                             <td>Complaint</td>
                             <td><span class="badge badge-pending">Pending</span></td>
                             <td>2023-10-23</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8210'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8209</a></td>
@@ -211,7 +212,7 @@
                             <td>Aspiration</td>
                             <td><span class="badge badge-resolved">Resolved</span></td>
                             <td>2023-10-22</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8209'); return false;">View</a></td>
                         </tr>
                         <tr>
                             <td><a href="#" class="id-link">#8208</a></td>
@@ -219,7 +220,7 @@
                             <td>Complaint</td>
                             <td><span class="badge badge-progress">In Progress</span></td>
                             <td>2023-10-21</td>
-                            <td><a href="#" class="action-link">View</a></td>
+                            <td><a href="#" class="action-link" onclick="viewReport('8208'); return false;">View</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -240,10 +241,160 @@
                 </div>
             </div>
         </section>
+    </main>
+
+    <!-- View Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Report Details</h2>
+            </div>
+            <div class="modal-body">
+                <div class="report-detail-section">
+                    <div class="report-header">
+                        <div>
+                            <span class="report-id" id="reportId">#8214</span>
+                            <span class="report-category" id="reportCategory">Complaint</span>
+                        </div>
+                        <span class="report-status badge badge-pending" id="reportStatus">Pending</span>
+                    </div>
+                    
+                    <h3 class="report-title" id="reportTitle">Perbaikan Jalan Rusak</h3>
+                    
+                    <div class="report-grid">
+                        <div class="report-item">
+                            <label><i class="fa-solid fa-user"></i> Reporter</label>
+                            <p id="reportAuthor">Ahmad Santoso</p>
+                        </div>
+                        
+                        <div class="report-item">
+                            <label><i class="fa-solid fa-calendar"></i> Submitted Date</label>
+                            <p id="reportDate">October 26, 2023</p>
+                        </div>
+                        
+                        <div class="report-item">
+                            <label><i class="fa-solid fa-location-dot"></i> Location</label>
+                            <p id="reportLocation">Jl. Merdeka No. 10, RT 05</p>
+                        </div>
+                        
+                        <div class="report-item">
+                            <label><i class="fa-solid fa-envelope"></i> Contact Email</label>
+                            <p id="reportEmail">ahmad@email.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="report-description">
+                        <label><i class="fa-solid fa-align-left"></i> Description</label>
+                        <p id="reportDescription">Jalan di RT 05 rusak parah dan membahayakan pengendara. Terdapat beberapa lubang besar yang dapat menyebabkan kecelakaan. Perlu segera dilakukan perbaikan untuk keamanan warga.</p>
+                    </div>
+                    
+                    <div class="report-attachments">
+                        <label><i class="fa-solid fa-paperclip"></i> Attachments</label>
+                        <div class="attachment-list" id="reportAttachments">
+                            <a href="#" class="attachment-item">
+                                <i class="fa-solid fa-file-image"></i>
+                                <span>foto-jalan-rusak-1.jpg</span>
+                                <span class="attachment-size">2.4 MB</span>
+                            </a>
+                            <a href="#" class="attachment-item">
+                                <i class="fa-solid fa-file-image"></i>
+                                <span>foto-jalan-rusak-2.jpg</span>
+                                <span class="attachment-size">1.8 MB</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Update Status Section -->
+                    <div class="report-update-section">
+                        <label><i class="fa-solid fa-pen-to-square"></i> Update Report Status</label>
+                        <form id="updateStatusForm" class="status-update-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <select id="updateStatus" class="form-select" required>
+                                        <option value="">Select new status...</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="in-progress">In Progress</option>
+                                        <option value="resolved">Resolved</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input type="text" id="updateAssignee" class="form-input" placeholder="Assign to (optional)">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea id="updateNotes" class="form-textarea" rows="3" placeholder="Add resolution notes or comments..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notifyReporter" checked>
+                                    <span>Send notification to reporter</span>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Update Status
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="report-history">
+                        <label><i class="fa-solid fa-clock-rotate-left"></i> Status History</label>
+                        <div class="history-timeline">
+                            <div class="history-item">
+                                <div class="history-icon">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                                <div class="history-content">
+                                    <strong>Report Submitted</strong>
+                                    <p>Report created by Ahmad Santoso</p>
+                                    <span class="history-date">Oct 26, 2023 - 09:30 AM</span>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-icon status-progress">
+                                    <i class="fa-solid fa-hourglass-half"></i>
+                                </div>
+                                <div class="history-content">
+                                    <strong>Status Changed to In Progress</strong>
+                                    <p>Assigned to Budi Santoso</p>
+                                    <span class="history-date">Oct 27, 2023 - 02:15 PM</span>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-icon status-resolved">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <div class="history-content">
+                                    <strong>Resolved</strong>
+                                    <p>Jalan sudah diperbaiki. Material dan tenaga kerja dari dinas PU.</p>
+                                    <span class="history-date">Nov 2, 2023 - 04:45 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeReportModal()">Close</button>
+                    <button type="button" class="btn-danger" onclick="deleteReport()">
+                        <i class="fa-solid fa-trash"></i>
+                        Delete Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer Component -->
     <div id="footer-placeholder"></div>
 
     <script src="js/admin.js"></script>
     <script src="js/charts.js"></script>
+    <script src="js/dashboard-reports.js"></script>
 </body>
 </html>
