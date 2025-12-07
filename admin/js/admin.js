@@ -104,11 +104,6 @@ function initClickHandlers() {
         alert('You have 3 new notifications');
     });
     
-    // Add New
-    document.querySelector('.top-bar-actions .btn-primary')?.addEventListener('click', () => {
-        alert('New submission form will open here');
-    });
-    
     // Navigation
     document.querySelectorAll('.nav-item').forEach(link => {
         link.addEventListener('click', () => {
