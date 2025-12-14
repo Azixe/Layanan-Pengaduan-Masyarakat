@@ -6,18 +6,23 @@ import validator from "validator";
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
+        // cek jika user ada
         const user = await wargaModel.findOne({ email });
 
+        // jika user tidak ditemukan
         if (!user) {
             return res.json({ success: false, message: "Pengguna tidak ditemukan" })
         }
 
+        // cek password user yang diinputkan dengan password di database
         const isMatch = await bcrypt.compare(password, user.password)
 
+        // jika password tidak sesuai
         if (!isMatch) {
             return res.json({ success: false, message: "Password salah" })
         }
 
+        // jika sesuai, buat token untuk pengguna
         const token = createToken(user._id);
         res.json({
             success: true,
@@ -75,6 +80,7 @@ const registerUser = async (req, res) => {
     }
 }
 
+// Mengambil profil warga yang sudah login
 const getProfile = async (req, res) => {
     try {
         res.json({
@@ -89,7 +95,9 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
+        // Mendapatkan ID pengguna dari token yang sudah diverifikasi
         const userId = req.user._id;
+        // Data yang akan diperbarui dari body request
         const { user_warga, alamat, no_hp } = req.body;
 
         // Validasi nama
