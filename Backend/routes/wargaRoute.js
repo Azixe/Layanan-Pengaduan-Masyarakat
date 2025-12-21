@@ -1,14 +1,18 @@
-import express from "express"
-import { getProfile, loginUser, registerUser, updateProfile } from "../controller/wargaController.js";
-import { requireAuth } from "../middleware/auth.js";
+// routes/wargaRoute.js
+import express from "express";
+import {
+  getProfile,
+  loginUser,
+  registerUser,
+  updateProfile,
+} from "../controller/wargaController.js";
+import authWarga from "../middleware/authWarga.js";
 
-const wargaRouter = express.Router()
+const router = express.Router();
 
-wargaRouter.post("/login", loginUser)
-wargaRouter.post("/register", registerUser)
-// Mengambil profil warga yang sudah login
-wargaRouter.get("/profile", requireAuth, getProfile)
-// Memperbarui profil akun warga
-wargaRouter.put("/profile", requireAuth, updateProfile)
+router.post("/login", loginUser);
+router.post("/register", registerUser);
+router.get("/profile", authWarga, getProfile);
+router.put("/profile", authWarga, updateProfile);
 
-export default wargaRouter;
+export default router;
