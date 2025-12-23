@@ -72,7 +72,7 @@
 
                 <button class="btn-primary" onclick="openAssignModal()">
                     <i class="fa-solid fa-plus"></i>
-                    Assign Task
+                    Tugaskan Laporan
                 </button>
             </div>
         </header>
@@ -80,39 +80,39 @@
         <!-- Task Stats -->
         <section class="stats-grid">
             <div class="stat-card">
-                <span class="stat-label">Total Tasks</span>
-                <div class="stat-value">45</div>
+                <span class="stat-label">Total Laporan</span>
+                <div class="stat-value">7</div>
             </div>
 
             <div class="stat-card stat-pending">
                 <span class="stat-label">Belum Dikerjakan</span>
-                <div class="stat-value">18</div>
+                <div class="stat-value">3</div>
             </div>
 
             <div class="stat-card stat-progress">
-                <span class="stat-label">Dalam Proses</span>
-                <div class="stat-value">15</div>
+                <span class="stat-label">Sedang Dikerjakan</span>
+                <div class="stat-value">2</div>
             </div>
 
             <div class="stat-card stat-resolved">
-                <span class="stat-label">Selesai</span>
-                <div class="stat-value">12</div>
+                <span class="stat-label">Selesai Dikerjakan</span>
+                <div class="stat-value">2</div>
             </div>
         </section>
 
         <!-- Task Board -->
         <section class="task-board">
-            <!-- Column: Belum Dikerjakan -->
-            <div class="task-column">
+            <!-- Column: Prioritas Tinggi -->
+            <div class="task-column column-high">
                 <div class="column-header">
-                    <h3><i class="fa-solid fa-circle-pause"></i> Belum Dikerjakan</h3>
-                    <span class="task-count">18</span>
+                    <h3><i class="fa-solid fa-arrow-up"></i> Prioritas: Tinggi</h3>
+                    <span class="task-count">3</span>
                 </div>
-                <div class="task-list" id="belumDikerjakan">
-                    <div class="task-card" draggable="true">
+                <div class="task-list" id="prioritasTinggi">
+                    <div class="task-card" draggable="true" data-task-id="8214">
                         <div class="task-header">
                             <span class="task-id">#8214</span>
-                            <div class="task-priority priority-high">High</div>
+                            <div class="task-status status-pending">Belum Dikerjakan</div>
                         </div>
                         <h4 class="task-title">Perbaikan Jalan Rusak</h4>
                         <p class="task-description">Jalan di RT 05 rusak parah dan membahayakan pengendara</p>
@@ -139,10 +139,79 @@
                         </div>
                     </div>
 
-                    <div class="task-card" draggable="true">
+                    <div class="task-card" draggable="true" data-task-id="8213">
+                        <div class="task-header">
+                            <span class="task-id">#8213</span>
+                            <div class="task-status status-progress">Sedang Dikerjakan</div>
+                        </div>
+                        <h4 class="task-title">Lampu Jalan Mati</h4>
+                        <p class="task-description">Lampu jalan di Jl. Merdeka sudah mati 2 minggu</p>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Eko Prasetyo</span>
+                            </div>
+                            <div class="task-date">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Dec 5, 2025</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-icon" onclick="viewTask('8213')" title="View Details">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" onclick="editTask('8213')" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteTask('8213')" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="task-card" draggable="true" data-task-id="8211">
+                        <div class="task-header">
+                            <span class="task-id">#8211</span>
+                            <div class="task-status status-done">Selesai Dikerjakan</div>
+                        </div>
+                        <h4 class="task-title">Masalah Keamanan Lingkungan</h4>
+                        <p class="task-description">Peningkatan keamanan dengan ronda malam</p>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Rudi Hartono</span>
+                            </div>
+                            <div class="task-date">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Nov 30, 2025</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-icon" onclick="viewTask('8211')">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" onclick="editTask('8211')">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteTask('8211')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column: Prioritas Sedang -->
+            <div class="task-column column-medium">
+                <div class="column-header">
+                    <h3><i class="fa-solid fa-minus"></i> Prioritas: Sedang</h3>
+                    <span class="task-count">2</span>
+                </div>
+                <div class="task-list" id="prioritasSedang">
+                    <div class="task-card" draggable="true" data-task-id="8212">
                         <div class="task-header">
                             <span class="task-id">#8212</span>
-                            <div class="task-priority priority-medium">Medium</div>
+                            <div class="task-status status-pending">Belum Dikerjakan</div>
                         </div>
                         <h4 class="task-title">Ide Festival Desa</h4>
                         <p class="task-description">Usulan untuk mengadakan festival budaya desa</p>
@@ -169,10 +238,49 @@
                         </div>
                     </div>
 
-                    <div class="task-card" draggable="true">
+                    <div class="task-card" draggable="true" data-task-id="8209">
+                        <div class="task-header">
+                            <span class="task-id">#8209</span>
+                            <div class="task-status status-progress">Sedang Dikerjakan</div>
+                        </div>
+                        <h4 class="task-title">Program Pelatihan Pemuda</h4>
+                        <p class="task-description">Pelatihan kewirausahaan untuk pemuda desa</p>
+                        <div class="task-meta">
+                            <div class="task-assignee">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Linda Wijaya</span>
+                            </div>
+                            <div class="task-date">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Nov 28, 2025</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-icon" onclick="viewTask('8209')">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" onclick="editTask('8209')">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteTask('8209')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column: Prioritas Rendah -->
+            <div class="task-column column-low">
+                <div class="column-header">
+                    <h3><i class="fa-solid fa-arrow-down"></i> Prioritas: Rendah</h3>
+                    <span class="task-count">2</span>
+                </div>
+                <div class="task-list" id="prioritasRendah">
+                    <div class="task-card" draggable="true" data-task-id="8210">
                         <div class="task-header">
                             <span class="task-id">#8210</span>
-                            <div class="task-priority priority-low">Low</div>
+                            <div class="task-status status-pending">Belum Dikerjakan</div>
                         </div>
                         <h4 class="task-title">Sampah Tidak Diangkut</h4>
                         <p class="task-description">Sampah di TPS sudah menumpuk 3 hari</p>
@@ -198,50 +306,11 @@
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Column: Dalam Proses -->
-            <div class="task-column">
-                <div class="column-header">
-                    <h3><i class="fa-solid fa-spinner"></i> Dalam Proses</h3>
-                    <span class="task-count">15</span>
-                </div>
-                <div class="task-list" id="dalamProses">
-                    <div class="task-card" draggable="true">
-                        <div class="task-header">
-                            <span class="task-id">#8213</span>
-                            <div class="task-priority priority-high">High</div>
-                        </div>
-                        <h4 class="task-title">Lampu Jalan Mati</h4>
-                        <p class="task-description">Lampu jalan di Jl. Merdeka sudah mati 2 minggu</p>
-                        <div class="task-meta">
-                            <div class="task-assignee">
-                                <i class="fa-solid fa-user"></i>
-                                <span>Eko Prasetyo</span>
-                            </div>
-                            <div class="task-date">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Dec 5, 2025</span>
-                            </div>
-                        </div>
-                        <div class="task-actions">
-                            <button class="btn-icon" onclick="viewTask('8213')">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-                            <button class="btn-icon" onclick="editTask('8213')">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button class="btn-icon btn-danger" onclick="deleteTask('8213')">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="task-card" draggable="true">
+                    <div class="task-card" draggable="true" data-task-id="8208">
                         <div class="task-header">
                             <span class="task-id">#8208</span>
-                            <div class="task-priority priority-medium">Medium</div>
+                            <div class="task-status status-done">Selesai Dikerjakan</div>
                         </div>
                         <h4 class="task-title">Pengadaan Air Bersih</h4>
                         <p class="task-description">Perlu penambahan fasilitas air bersih di RT 03</p>
@@ -269,61 +338,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Column: Selesai -->
-            <div class="task-column">
-                <div class="column-header">
-                    <h3><i class="fa-solid fa-circle-check"></i> Selesai</h3>
-                    <span class="task-count">12</span>
-                </div>
-                <div class="task-list" id="selesai">
-                    <div class="task-card" draggable="true">
-                        <div class="task-header">
-                            <span class="task-id">#8211</span>
-                            <div class="task-priority priority-high">High</div>
-                        </div>
-                        <h4 class="task-title">Masalah Keamanan Lingkungan</h4>
-                        <p class="task-description">Peningkatan keamanan dengan ronda malam</p>
-                        <div class="task-meta">
-                            <div class="task-assignee">
-                                <i class="fa-solid fa-user"></i>
-                                <span>Rudi Hartono</span>
-                            </div>
-                            <div class="task-date">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Nov 30, 2025</span>
-                            </div>
-                        </div>
-                        <div class="task-completion">
-                            <i class="fa-solid fa-check"></i>
-                            <span>Completed on Dec 6, 2025</span>
-                        </div>
-                    </div>
-
-                    <div class="task-card" draggable="true">
-                        <div class="task-header">
-                            <span class="task-id">#8209</span>
-                            <div class="task-priority priority-medium">Medium</div>
-                        </div>
-                        <h4 class="task-title">Program Pelatihan Pemuda</h4>
-                        <p class="task-description">Pelatihan kewirausahaan untuk pemuda desa</p>
-                        <div class="task-meta">
-                            <div class="task-assignee">
-                                <i class="fa-solid fa-user"></i>
-                                <span>Linda Wijaya</span>
-                            </div>
-                            <div class="task-date">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Nov 28, 2025</span>
-                            </div>
-                        </div>
-                        <div class="task-completion">
-                            <i class="fa-solid fa-check"></i>
-                            <span>Completed on Dec 5, 2025</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
     </main>
 
@@ -331,13 +345,13 @@
     <div id="assignModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Assign Task</h2>
+                <h2>Tugaskan Laporan</h2>
             </div>
             <form id="assignTaskForm" class="modal-body">
                 <div class="form-group">
-                    <label for="reportSelect">Select Report <span class="required">*</span></label>
+                    <label for="reportSelect">Pilih Laporan <span class="required">*</span></label>
                     <select id="reportSelect" required>
-                        <option value="">Choose a report...</option>
+                        <option value="">Pilih laporan...</option>
                         <option value="8214">8214 - Perbaikan Jalan Rusak</option>
                         <option value="8213">8213 - Lampu Jalan Mati</option>
                         <option value="8212">8212 - Ide Festival Desa</option>
@@ -347,9 +361,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="assigneeSelect">Assign To <span class="required">*</span></label>
+                    <label for="assigneeSelect">Tugaskan Ke <span class="required">*</span></label>
                     <select id="assigneeSelect" required>
-                        <option value="">Choose a person...</option>
+                        <option value="">Pilih petugas...</option>
                         <option value="budi">Budi Santoso</option>
                         <option value="siti">Siti Aminah</option>
                         <option value="ahmad">Ahmad Yusuf</option>
@@ -361,37 +375,37 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="prioritySelect">Priority <span class="required">*</span></label>
+                    <label for="prioritySelect">Level Prioritas <span class="required">*</span></label>
                     <select id="prioritySelect" required>
-                        <option value="">Select priority...</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
+                        <option value="">Pilih prioritas...</option>
+                        <option value="tinggi">Tinggi</option>
+                        <option value="sedang">Sedang</option>
+                        <option value="rendah">Rendah</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="dueDate">Due Date</label>
+                    <label for="dueDate">Batas Waktu</label>
                     <input type="date" id="dueDate">
                 </div>
 
                 <div class="form-group">
-                    <label for="taskNotes">Additional Notes</label>
-                    <textarea id="taskNotes" rows="3" placeholder="Add any special instructions or notes..."></textarea>
+                    <label for="taskNotes">Catatan Tambahan</label>
+                    <textarea id="taskNotes" rows="3" placeholder="Tambahkan catatan atau instruksi khusus..."></textarea>
                 </div>
 
                 <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="sendNotification" checked>
-                        <span>Send notification to assignee</span>
+                        <span>Kirim notifikasi ke petugas</span>
                     </label>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeAssignModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" onclick="closeAssignModal()">Batal</button>
                     <button type="submit" class="btn-primary">
                         <i class="fa-solid fa-paper-plane"></i>
-                        Assign Task
+                        Tugaskan
                     </button>
                 </div>
             </form>
@@ -402,14 +416,14 @@
     <div id="viewModal" class="modal">
         <div class="modal-content modal-large">
             <div class="modal-header">
-                <h2>Task Details</h2>
+                <h2>Detail Laporan</h2>
             </div>
             <div class="modal-body">
                 <div class="detail-section">
                     <div class="detail-header">
                         <div>
                             <span class="detail-id" id="viewTaskId">#8214</span>
-                            <span class="detail-priority priority-high" id="viewTaskPriority">High Priority</span>
+                            <span class="detail-priority priority-high" id="viewTaskPriority">Prioritas Tinggi</span>
                         </div>
                         <span class="detail-status badge badge-pending" id="viewTaskStatus">Belum Dikerjakan</span>
                     </div>
@@ -418,38 +432,38 @@
                     
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <label><i class="fa-solid fa-user"></i> Assigned To</label>
+                            <label><i class="fa-solid fa-user"></i> Ditangani Oleh</label>
                             <p id="viewTaskAssignee">Budi Santoso</p>
                         </div>
                         
                         <div class="detail-item">
-                            <label><i class="fa-solid fa-calendar"></i> Created Date</label>
+                            <label><i class="fa-solid fa-calendar"></i> Tanggal Dibuat</label>
                             <p id="viewTaskCreated">December 4, 2025</p>
                         </div>
                         
                         <div class="detail-item">
-                            <label><i class="fa-solid fa-clock"></i> Due Date</label>
+                            <label><i class="fa-solid fa-clock"></i> Batas Waktu</label>
                             <p id="viewTaskDue">December 10, 2025</p>
                         </div>
                         
                         <div class="detail-item">
-                            <label><i class="fa-solid fa-list"></i> Category</label>
-                            <p id="viewTaskCategory">Complaint</p>
+                            <label><i class="fa-solid fa-list"></i> Kategori</label>
+                            <p id="viewTaskCategory">Keluhan</p>
                         </div>
                     </div>
                     
                     <div class="detail-description">
-                        <label><i class="fa-solid fa-align-left"></i> Description</label>
+                        <label><i class="fa-solid fa-align-left"></i> Deskripsi</label>
                         <p id="viewTaskDescription">Jalan di RT 05 rusak parah dan membahayakan pengendara. Terdapat beberapa lubang besar yang dapat menyebabkan kecelakaan. Perlu segera dilakukan perbaikan untuk keamanan warga.</p>
                     </div>
                     
                     <div class="detail-notes">
-                        <label><i class="fa-solid fa-note-sticky"></i> Additional Notes</label>
+                        <label><i class="fa-solid fa-note-sticky"></i> Catatan Tambahan</label>
                         <p id="viewTaskNotes">Koordinasi dengan dinas PU untuk material perbaikan. Budget sudah disetujui.</p>
                     </div>
                     
                     <div class="detail-attachments">
-                        <label><i class="fa-solid fa-paperclip"></i> Attachments</label>
+                        <label><i class="fa-solid fa-paperclip"></i> Lampiran</label>
                         <div class="attachment-list" id="viewTaskAttachments">
                             <a href="#" class="attachment-item">
                                 <i class="fa-solid fa-file-image"></i>
@@ -463,15 +477,15 @@
                     </div>
                     
                     <div class="detail-timeline">
-                        <label><i class="fa-solid fa-timeline"></i> Activity Timeline</label>
+                        <label><i class="fa-solid fa-timeline"></i> Riwayat Aktivitas</label>
                         <div class="timeline-list">
                             <div class="timeline-item">
                                 <div class="timeline-icon">
                                     <i class="fa-solid fa-plus"></i>
                                 </div>
                                 <div class="timeline-content">
-                                    <strong>Task Created</strong>
-                                    <p>Task assigned to Budi Santoso</p>
+                                    <strong>Laporan Dibuat</strong>
+                                    <p>Ditugaskan ke Budi Santoso</p>
                                     <span class="timeline-date">Dec 4, 2025 - 09:30 AM</span>
                                 </div>
                             </div>
@@ -480,8 +494,8 @@
                                     <i class="fa-solid fa-bell"></i>
                                 </div>
                                 <div class="timeline-content">
-                                    <strong>Notification Sent</strong>
-                                    <p>Email notification sent to assignee</p>
+                                    <strong>Notifikasi Terkirim</strong>
+                                    <p>Email notifikasi dikirim ke petugas</p>
                                     <span class="timeline-date">Dec 4, 2025 - 09:31 AM</span>
                                 </div>
                             </div>
@@ -490,10 +504,10 @@
                 </div>
                 
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeViewModal()">Close</button>
+                    <button type="button" class="btn-secondary" onclick="closeViewModal()">Tutup</button>
                     <button type="button" class="btn-primary" onclick="openEditModalFromView()">
                         <i class="fa-solid fa-pen"></i>
-                        Edit Task
+                        Edit Laporan
                     </button>
                 </div>
             </div>
@@ -504,25 +518,46 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit Task</h2>
+                <h2>Edit Laporan</h2>
             </div>
             <form id="editTaskForm" class="modal-body">
                 <input type="hidden" id="editTaskId">
                 
                 <div class="form-group">
-                    <label for="editTaskTitle">Task Title <span class="required">*</span></label>
+                    <label for="editTaskTitle">Judul Laporan <span class="required">*</span></label>
                     <input type="text" id="editTaskTitle" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="editTaskDescription">Description <span class="required">*</span></label>
+                    <label for="editTaskDescription">Deskripsi <span class="required">*</span></label>
                     <textarea id="editTaskDescription" rows="4" required></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="editAssigneeSelect">Assigned To <span class="required">*</span></label>
-                        <select id="editAssigneeSelect" required>
+                        <label for="editStatusSelect">Status Pengerjaan <span class="required">*</span></label>
+                        <select id="editStatusSelect" required>
+                            <option value="pending">Belum Dikerjakan</option>
+                            <option value="progress">Sedang Dikerjakan</option>
+                            <option value="done">Selesai</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editPrioritySelect">Level Prioritas <span class="required">*</span></label>
+                        <select id="editPrioritySelect" required>
+                            <option value="tinggi">Tinggi</option>
+                            <option value="sedang">Sedang</option>
+                            <option value="rendah">Rendah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editAssigneeSelect">Ditugaskan Kepada</label>
+                        <select id="editAssigneeSelect">
+                            <option value="">Belum ditugaskan</option>
                             <option value="budi">Budi Santoso</option>
                             <option value="siti">Siti Aminah</option>
                             <option value="ahmad">Ahmad Yusuf</option>
@@ -534,48 +569,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="editStatusSelect">Status <span class="required">*</span></label>
-                        <select id="editStatusSelect" required>
-                            <option value="belumDikerjakan">Belum Dikerjakan</option>
-                            <option value="dalamProses">Dalam Proses</option>
-                            <option value="selesai">Selesai</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="editPrioritySelect">Priority <span class="required">*</span></label>
-                        <select id="editPrioritySelect" required>
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editDueDate">Due Date</label>
+                        <label for="editDueDate">Tanggal Target</label>
                         <input type="date" id="editDueDate">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="editTaskNotes">Additional Notes</label>
-                    <textarea id="editTaskNotes" rows="3" placeholder="Add any special instructions or notes..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="editSendNotification">
-                        <span>Notify assignee about changes</span>
-                    </label>
+                    <label for="editTaskNotes">Catatan Tambahan</label>
+                    <textarea id="editTaskNotes" rows="3" placeholder="Tambahkan catatan atau instruksi khusus..."></textarea>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Batal</button>
                     <button type="submit" class="btn-primary">
                         <i class="fa-solid fa-floppy-disk"></i>
-                        Save Changes
+                        Simpan Perubahan
                     </button>
                 </div>
             </form>
