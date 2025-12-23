@@ -135,20 +135,20 @@
         <!-- Submissions Table Component -->
         <section class="content-section">
             <div class="section-header">
-                <h2>All Submissions</h2>
+                <h2>Semua Laporan</h2>
                 
                 <div class="section-filters">
                     <select class="filter-select">
-                        <option>All Status</option>
+                        <option>Semua Status</option>
                         <option>Pending</option>
                         <option>In Progress</option>
                         <option>Resolved</option>
                     </select>
 
                     <select class="filter-select">
-                        <option>All Types</option>
-                        <option>Complaint</option>
-                        <option>Aspiration</option>
+                        <option>Semua Tipe</option>
+                        <option>Keluhan</option>
+                        <option>Saran</option>
                     </select>
                 </div>
             </div>
@@ -158,11 +158,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
-                            <th>Type</th>
+                            <th>Judul</th>
+                            <th>Tipe</th>
                             <th>Status</th>
-                            <th>Date Submitted</th>
-                            <th>Actions</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="submissionsTable">
@@ -247,14 +247,14 @@
     <div id="reportModal" class="modal">
         <div class="modal-content modal-large">
             <div class="modal-header">
-                <h2>Report Details</h2>
+                <h2>Detail Laporan</h2>
             </div>
             <div class="modal-body">
                 <div class="report-detail-section">
                     <div class="report-header">
                         <div>
                             <span class="report-id" id="reportId">#8214</span>
-                            <span class="report-category" id="reportCategory">Complaint</span>
+                            <span class="report-category" id="reportCategory">Keluhan</span>
                         </div>
                         <span class="report-status badge badge-pending" id="reportStatus">Pending</span>
                     </div>
@@ -263,33 +263,33 @@
                     
                     <div class="report-grid">
                         <div class="report-item">
-                            <label><i class="fa-solid fa-user"></i> Reporter</label>
+                            <label><i class="fa-solid fa-user"></i> Pelapor</label>
                             <p id="reportAuthor">Ahmad Santoso</p>
                         </div>
                         
                         <div class="report-item">
-                            <label><i class="fa-solid fa-calendar"></i> Submitted Date</label>
+                            <label><i class="fa-solid fa-calendar"></i> Tanggal Laporan</label>
                             <p id="reportDate">October 26, 2023</p>
                         </div>
                         
                         <div class="report-item">
-                            <label><i class="fa-solid fa-location-dot"></i> Location</label>
+                            <label><i class="fa-solid fa-location-dot"></i> Lokasi</label>
                             <p id="reportLocation">Jl. Merdeka No. 10, RT 05</p>
                         </div>
                         
                         <div class="report-item">
-                            <label><i class="fa-solid fa-envelope"></i> Contact Email</label>
+                            <label><i class="fa-solid fa-envelope"></i> Email Kontak</label>
                             <p id="reportEmail">ahmad@email.com</p>
                         </div>
                     </div>
                     
                     <div class="report-description">
-                        <label><i class="fa-solid fa-align-left"></i> Description</label>
+                        <label><i class="fa-solid fa-align-left"></i> Deskripsi</label>
                         <p id="reportDescription">Jalan di RT 05 rusak parah dan membahayakan pengendara. Terdapat beberapa lubang besar yang dapat menyebabkan kecelakaan. Perlu segera dilakukan perbaikan untuk keamanan warga.</p>
                     </div>
                     
                     <div class="report-attachments">
-                        <label><i class="fa-solid fa-paperclip"></i> Attachments</label>
+                        <label><i class="fa-solid fa-paperclip"></i> Lampiran</label>
                         <div class="attachment-list" id="reportAttachments">
                             <a href="#" class="attachment-item">
                                 <i class="fa-solid fa-file-image"></i>
@@ -303,88 +303,10 @@
                             </a>
                         </div>
                     </div>
-                    
-                    <!-- Update Status Section -->
-                    <div class="report-update-section">
-                        <label><i class="fa-solid fa-pen-to-square"></i> Update Report Status</label>
-                        <form id="updateStatusForm" class="status-update-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <select id="updateStatus" class="form-select" required>
-                                        <option value="">Select new status...</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="in-progress">In Progress</option>
-                                        <option value="resolved">Resolved</option>
-                                        <option value="rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <input type="text" id="updateAssignee" class="form-input" placeholder="Assign to (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <textarea id="updateNotes" class="form-textarea" rows="3" placeholder="Add resolution notes or comments..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="notifyReporter" checked>
-                                    <span>Send notification to reporter</span>
-                                </label>
-                            </div>
-                            
-                            <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-floppy-disk"></i>
-                                Update Status
-                            </button>
-                        </form>
-                    </div>
-                    
-                    <div class="report-history">
-                        <label><i class="fa-solid fa-clock-rotate-left"></i> Status History</label>
-                        <div class="history-timeline">
-                            <div class="history-item">
-                                <div class="history-icon">
-                                    <i class="fa-solid fa-plus"></i>
-                                </div>
-                                <div class="history-content">
-                                    <strong>Report Submitted</strong>
-                                    <p>Report created by Ahmad Santoso</p>
-                                    <span class="history-date">Oct 26, 2023 - 09:30 AM</span>
-                                </div>
-                            </div>
-                            <div class="history-item">
-                                <div class="history-icon status-progress">
-                                    <i class="fa-solid fa-hourglass-half"></i>
-                                </div>
-                                <div class="history-content">
-                                    <strong>Status Changed to In Progress</strong>
-                                    <p>Assigned to Budi Santoso</p>
-                                    <span class="history-date">Oct 27, 2023 - 02:15 PM</span>
-                                </div>
-                            </div>
-                            <div class="history-item">
-                                <div class="history-icon status-resolved">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <div class="history-content">
-                                    <strong>Resolved</strong>
-                                    <p>Jalan sudah diperbaiki. Material dan tenaga kerja dari dinas PU.</p>
-                                    <span class="history-date">Nov 2, 2023 - 04:45 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeReportModal()">Close</button>
-                    <button type="button" class="btn-danger" onclick="deleteReport()">
-                        <i class="fa-solid fa-trash"></i>
-                        Delete Report
-                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeReportModal()">Tutup</button>
                 </div>
             </div>
         </div>
