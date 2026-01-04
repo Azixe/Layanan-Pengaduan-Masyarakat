@@ -2,8 +2,34 @@ import "dotenv/config";
 import laporanModel from "../models/laporanModel.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { uploadFiletoCloudinary } from "../services/driveServices.js";
+import Notification from "../models/notificationModel.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+
+// Helper untuk menentukan prioritas berdasarkan kategori & sentimen AI
+const determinePriority = (kategori, sentimen) => {
+  const category = (kategori || "").toLowerCase();
+  const sentiment = (sentimen || "").toLowerCase();
+
+  // Jika laporan sudah selesai, secara default bisa dianggap prioritas rendah
+  if (sentiment === "positif") {
+    return "rendah";
+  }
+
+  if (["infrastruktur", "keamanan", "kesehatan"].includes(category)) {
+    return "tinggi";
+  }
+
+  if (["lingkungan", "pelayanan", "sosial"].includes(category)) {
+    return "sedang";
+  }
+
+  if (sentiment === "negatif") {
+    return "tinggi";
+  }
+
+  return "sedang";
+};
 
 const generateNomorLaporan = async () => {
   const prefix = "LPR";
@@ -91,6 +117,11 @@ const createLaporan = async (req, res) => {
       console.error("ERROR AI:", error.message);
     }
 
+    // Tentukan prioritas awal berbasis analisis AI
+    const kategoriFinal = analisisAI.kategori || kategori;
+    const sentimenFinal = analisisAI.sentimen;
+    const prioritasAwal = determinePriority(kategoriFinal, sentimenFinal);
+
     // Simpan ke Database
     const newLaporan = new laporanModel({
       warga_id,
@@ -107,9 +138,31 @@ const createLaporan = async (req, res) => {
       sentimen_ai: analisisAI.sentimen,
       keywords_ai: analisisAI.keywords,
       status_laporan: "Belum dikerjakan",
+      prioritas: prioritasAwal,
     });
 
     await newLaporan.save();
+
+    // Buat notifikasi untuk admin ketika laporan baru berhasil dibuat
+    try {
+      await Notification.create({
+        title: "Laporan baru masuk",
+        message: `Laporan dari ${nama_warga || "Warga"}: ${newLaporan.judul}`,
+        notificationType: "laporan",
+        recipientType: "admin",
+        laporan: newLaporan._id,
+        metadata: {
+          nomor_laporan: newLaporan.nomor_laporan,
+          nama_warga: newLaporan.nama_warga,
+          prioritas: newLaporan.prioritas,
+        },
+      });
+    } catch (notifyError) {
+      console.error(
+        "Gagal membuat notifikasi admin untuk laporan baru:",
+        notifyError.message
+      );
+    }
 
     res.status(201).json({
       message: "Laporan berhasil dibuat",
@@ -228,6 +281,7 @@ const getAllLaporan = async (req, res) => {
       .find(query)
       .select("-pdf_data")
       .populate("warga_id", "user_warga email no_hp alamat")
+      .populate("petugas", "nama email telepon")
       .sort({ [sortBy]: sortOrder })
       .skip(skip)
       .limit(parseInt(limit));
@@ -255,7 +309,8 @@ const getLaporanById = async (req, res) => {
   try {
     const laporan = await laporanModel
       .findById(req.params.id)
-      .populate("warga_id", "user_warga email no_hp alamat");
+      .populate("warga_id", "user_warga email no_hp alamat")
+      .populate("petugas", "nama email telepon");
 
     if (!laporan) {
       return res
@@ -311,10 +366,10 @@ const updateStatusLaporan = async (req, res) => {
   }
 };
 
-// UPDATE LAPORAN (judul, deskripsi, status, komentar)
+// UPDATE LAPORAN (judul, deskripsi, status, komentar, prioritas)
 const updateLaporan = async (req, res) => {
   try {
-    const { judul, deskripsi, status_laporan, komentar } = req.body;
+    const { judul, deskripsi, status_laporan, komentar, prioritas } = req.body;
 
     const updateData = {};
 
@@ -343,9 +398,22 @@ const updateLaporan = async (req, res) => {
       updateData.status_laporan = status_laporan;
     }
 
+    if (prioritas) {
+      const allowed = ["tinggi", "sedang", "rendah"];
+      if (!allowed.includes(prioritas)) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Prioritas tidak valid. Gunakan: tinggi, sedang, atau rendah.",
+        });
+      }
+      updateData.prioritas = prioritas;
+    }
+
     const laporan = await laporanModel
       .findByIdAndUpdate(req.params.id, updateData, { new: true })
-      .populate("warga_id", "user_warga email no_hp alamat");
+      .populate("warga_id", "user_warga email no_hp alamat")
+      .populate("petugas", "nama email telepon");
 
     if (!laporan) {
       return res
@@ -360,6 +428,100 @@ const updateLaporan = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in updateLaporan:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// PENUGASAN LAPORAN KE PETUGAS (prioritas, petugas, deadline, catatan, notifikasi)
+const assignLaporan = async (req, res) => {
+  try {
+    const {
+      laporanId,
+      prioritas,
+      petugasId,
+      deadline,
+      catatan,
+      sendNotification,
+    } = req.body;
+
+    if (!laporanId || !petugasId) {
+      return res.status(400).json({
+        success: false,
+        message: "laporanId dan petugasId wajib diisi",
+      });
+    }
+
+    const updateData = {};
+
+    if (prioritas) {
+      const allowed = ["tinggi", "sedang", "rendah"];
+      if (!allowed.includes(prioritas)) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Prioritas tidak valid. Gunakan: tinggi, sedang, atau rendah.",
+        });
+      }
+      updateData.prioritas = prioritas;
+    }
+
+    updateData.petugas = petugasId;
+
+    if (deadline) {
+      const parsed = new Date(deadline);
+      if (!Number.isNaN(parsed.getTime())) {
+        updateData.deadline_tugas = parsed;
+      }
+    }
+
+    if (typeof catatan === "string") {
+      updateData.catatan_tugas = catatan;
+    }
+
+    const laporan = await laporanModel
+      .findByIdAndUpdate(laporanId, updateData, { new: true })
+      .populate("warga_id", "user_warga email no_hp alamat")
+      .populate("petugas", "nama email telepon");
+
+    if (!laporan) {
+      return res.status(404).json({
+        success: false,
+        message: "Laporan tidak ditemukan",
+      });
+    }
+
+    // Opsional: kirim notifikasi ke petugas yang ditugaskan
+    if (sendNotification) {
+      try {
+        await Notification.create({
+          title: "Tugas baru",
+          message: `Anda ditugaskan menangani laporan ${
+            laporan.nomor_laporan || ""
+          }`,
+          notificationType: "task",
+          recipientType: "petugas",
+          recipient: petugasId,
+          laporan: laporan._id,
+          metadata: {
+            prioritas: laporan.prioritas,
+            deadline_tugas: laporan.deadline_tugas,
+          },
+        });
+      } catch (notifyError) {
+        console.error(
+          "Gagal membuat notifikasi penugasan ke petugas:",
+          notifyError.message
+        );
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Laporan berhasil ditugaskan ke petugas",
+      data: laporan,
+    });
+  } catch (error) {
+    console.error("Error in assignLaporan:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -426,4 +588,5 @@ export {
   updateLaporan,
   deleteLaporan,
   getStatistics,
+  assignLaporan,
 };

@@ -65,10 +65,22 @@
                     <input type="text" placeholder="Search submissions...">
                 </div>
 
-                <button class="notification-btn">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
+                <!-- Notification Dropdown (Dashboard) -->
+                <div class="notification-wrapper">
+                    <button class="notification-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="notification-badge">0</span>
+                    </button>
+                    <div id="notificationDropdown" class="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Notifikasi</h4>
+                            <button class="btn-text" onclick="loadNotifications()">Refresh</button>
+                        </div>
+                        <div id="notificationList" class="notification-list">
+                            <div class="notification-empty">Memuat notifikasi...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 

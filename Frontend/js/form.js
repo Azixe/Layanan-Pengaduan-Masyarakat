@@ -118,18 +118,19 @@ function initializeUserMenu() {
 // Character counter for description textarea
 function setupCharCounter() {
   const textarea = document.getElementById("description");
-  const counter = document.querySelector(".char-count");
+  const counterWrapper = document.querySelector(".char-count");
+  const counterSpan = document.getElementById("charCount");
   const maxLength = 1000;
 
-  if (textarea && counter) {
+  if (textarea && counterWrapper && counterSpan) {
     textarea.addEventListener("input", () => {
       const length = textarea.value.length;
-      counter.textContent = `${length}/${maxLength}`;
+      counterSpan.textContent = length;
 
       if (length > maxLength * 0.9) {
-        counter.style.color = "#ff4757";
+        counterWrapper.style.color = "#ff4757";
       } else {
-        counter.style.color = "#999";
+        counterWrapper.style.color = "#999";
       }
     });
   }
@@ -143,7 +144,75 @@ function setupFileUpload() {
 
   if (!uploadArea || !fileInput || !previewContainer) return;
 
+  // Inject simple animation styles
+  if (!document.getElementById("upload-animation-styles")) {
+    const style = document.createElement("style");
+    style.id = "upload-animation-styles";
+    style.textContent = `
+      .file-upload-area {
+        transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      }
+      .file-upload-area.uploading {
+        position: relative;
+        border-color: var(--primary-color);
+        background: rgba(24, 119, 242, 0.05);
+        box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.15);
+      }
+      .file-upload-area.uploading::after {
+        content: "Mengunggah file...";
+        position: absolute;
+        inset: auto 16px 10px auto;
+        font-size: 0.85rem;
+        color: var(--primary-color);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        pointer-events: none;
+      }
+      .file-upload-area.uploading::before {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(24, 119, 242, 0.3);
+        border-top-color: var(--primary-color);
+        right: 110px;
+        bottom: 12px;
+        animation: upload-spin 0.7s linear infinite;
+      }
+      .file-item.upload-anim {
+        opacity: 0;
+        transform: translateY(6px);
+        animation: upload-fade-in 0.35s ease forwards;
+      }
+      @keyframes upload-spin {
+        to { transform: rotate(360deg); }
+      }
+      @keyframes upload-fade-in {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   let uploadedFiles = [];
+  let uploadingTimeout = null;
+
+  function startUploadingAnim() {
+    if (!uploadArea.classList.contains("uploading")) {
+      uploadArea.classList.add("uploading");
+    }
+    if (uploadingTimeout) clearTimeout(uploadingTimeout);
+  }
+
+  function stopUploadingAnim() {
+    if (uploadingTimeout) clearTimeout(uploadingTimeout);
+    uploadingTimeout = setTimeout(() => {
+      uploadArea.classList.remove("uploading");
+    }, 600);
+  }
 
   // Click to upload
   uploadArea.addEventListener("click", () => {
@@ -169,19 +238,23 @@ function setupFileUpload() {
     uploadArea.style.background = "transparent";
 
     const files = Array.from(e.dataTransfer.files);
+    startUploadingAnim();
     handleFiles(files);
+    stopUploadingAnim();
   });
 
   // File input change
   fileInput.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
+    if (!files.length) return;
+    startUploadingAnim();
     handleFiles(files);
+    stopUploadingAnim();
   });
 
   // Handle files
   function handleFiles(files) {
     const maxSize = 5 * 1024 * 1024; // 5MB
-    // Support all common image MIME types and variations
     const allowedTypes = [
       "image/png",
       "image/jpeg",
@@ -219,20 +292,28 @@ function setupFileUpload() {
     });
   }
 
+  function formatFileSize(size) {
+    if (size >= 1024 * 1024) {
+      return (size / (1024 * 1024)).toFixed(2) + " MB";
+    }
+    if (size >= 1024) {
+      return (size / 1024).toFixed(2) + " KB";
+    }
+    return size + " B";
+  }
+
   // Display file preview
   function displayFile(file) {
     const fileItem = document.createElement("div");
-    fileItem.className = "file-item";
+    fileItem.className = "file-item upload-anim";
 
     const fileSize = formatFileSize(file.size);
 
-    // Preview element (image thumbnail)
     let blobUrl = null;
     let previewEl = document.createElement("div");
     previewEl.className = "file-preview-item";
 
     if (file.type && file.type.startsWith("image/")) {
-      // Create image thumbnail
       blobUrl = URL.createObjectURL(file);
       const img = document.createElement("img");
       img.className = "file-thumb";
@@ -240,7 +321,6 @@ function setupFileUpload() {
       img.alt = file.name;
       img.loading = "lazy";
 
-      // Add error handling for image load
       img.onerror = () => {
         console.error(`[Image Load] Failed to load preview: ${file.name}`);
         previewEl.innerHTML = `
@@ -257,7 +337,6 @@ function setupFileUpload() {
 
       previewEl.appendChild(img);
     } else {
-      // Fallback: Generic icon
       previewEl.innerHTML = `
         <div class="file-icon">
           <i class="fas fa-file-image"></i>
@@ -265,7 +344,6 @@ function setupFileUpload() {
       `;
     }
 
-    // Add meta/info block below preview
     const infoBlock = document.createElement("div");
     infoBlock.className = "file-info";
     infoBlock.innerHTML = `
@@ -275,7 +353,6 @@ function setupFileUpload() {
         </div>
       `;
 
-    // Store blob URL to revoke later
     if (blobUrl) fileItem.dataset.blob = blobUrl;
 
     fileItem.appendChild(previewEl);
@@ -286,9 +363,7 @@ function setupFileUpload() {
     removeBtn.className = "file-remove";
     removeBtn.innerHTML = '<i class="fas fa-times"></i>';
     removeBtn.addEventListener("click", () => {
-      // remove from uploadedFiles and DOM
       uploadedFiles = uploadedFiles.filter((f) => f.name !== file.name);
-      // revoke blob URL if any
       if (fileItem.dataset && fileItem.dataset.blob) {
         try {
           URL.revokeObjectURL(fileItem.dataset.blob);
@@ -316,7 +391,7 @@ function setupFileUpload() {
 function validateForm() {
   const title = document.getElementById("title").value.trim();
   const description = document.getElementById("description").value.trim();
-  const category = document.getElementById("category").value;
+  const topic = document.getElementById("topic").value;
 
   if (!title) {
     showError("Judul laporan harus diisi");
@@ -342,9 +417,9 @@ function validateForm() {
     return false;
   }
 
-  if (!category) {
-    showError("Kategori harus dipilih");
-    document.getElementById("category").focus();
+  if (!topic) {
+    showError("Topik laporan harus dipilih");
+    document.getElementById("topic").focus();
     return false;
   }
 
@@ -383,7 +458,7 @@ function setupFormSubmit() {
       "deskripsi",
       document.getElementById("description").value.trim()
     );
-    formData.append("kategori", document.getElementById("category").value);
+    formData.append("kategori", document.getElementById("topic").value);
     formData.append("lokasi", document.getElementById("location").value.trim());
     formData.append("nama_warga", localStorage.getItem("user_name"));
 
@@ -405,6 +480,7 @@ function setupFormSubmit() {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
     submitBtn.disabled = true;
     form.classList.add("form-loading");
+    submitBtn.classList.add("loading");
 
     try {
       const response = await fetch(
@@ -444,6 +520,7 @@ function setupFormSubmit() {
       submitBtn.innerHTML = originalBtnText;
       submitBtn.disabled = false;
       form.classList.remove("form-loading");
+      submitBtn.classList.remove("loading");
     }
   });
 }

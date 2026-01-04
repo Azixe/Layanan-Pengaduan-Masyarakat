@@ -23,6 +23,19 @@ const laporanSchema = new mongoose.Schema(
     kategori_ai: { type: String },
     sentimen_ai: { type: String },
     keywords_ai: { type: [String] },
+    // prioritas penanganan laporan (tinggi/sedang/rendah)
+    prioritas: {
+      type: String,
+      enum: ["tinggi", "sedang", "rendah"],
+    },
+    // relasi petugas yang ditugaskan menangani laporan ini
+    petugas: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Petugas",
+    },
+    // informasi penugasan tambahan
+    deadline_tugas: { type: Date },
+    catatan_tugas: { type: String },
     createdAt: { type: Date, default: Date.now },
   },
   {

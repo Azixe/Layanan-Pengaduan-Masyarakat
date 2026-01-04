@@ -45,6 +45,7 @@ const PRIORITY_ORDER = {
 let laporanCache = [];
 let taskCache = [];
 let currentSearchTerm = "";
+let currentSelectedTaskId = null;
 let searchTimer;
 let draggedCard = null;
 let dragPlaceholder = null;
@@ -395,7 +396,7 @@ function transformLaporanToTask(laporan) {
     lokasi: laporan.lokasi || "Tidak diketahui",
     createdAt: laporan.createdAt,
     updatedAt: laporan.updatedAt,
-    notes: laporan.komentar || "",
+    notes: laporan.catatan_tugas || laporan.komentar || "",
     attachments: laporan.gambar ? [laporan.gambar] : [],
     history: buildHistoryFromLaporan(laporan),
     // info penugasan (untuk ditampilkan di detail laporan)
@@ -543,7 +544,10 @@ function createTaskCard(task) {
   const editBtn = createActionButton("edit", "fa-solid fa-pen", () =>
     editTask(task._id)
   );
-  actions.append(viewBtn, editBtn);
+  const assignBtn = createActionButton("assign", "fa-solid fa-user-check", () =>
+    openAssignModal(task._id)
+  );
+  actions.append(viewBtn, editBtn, assignBtn);
 
   card.append(header, titleEl, descEl, meta, actions);
   return card;
@@ -609,7 +613,7 @@ function renderReportOptions(laporan) {
   });
 }
 
-function openAssignModal() {
+function openAssignModal(taskId) {
   const modal = document.getElementById("assignModal");
   if (!modal) {
     // jika modal belum dibuat di HTML
@@ -625,16 +629,34 @@ function openAssignModal() {
     form.reset();
   }
 
-  // sinkronkan level prioritas dengan laporan yang dipilih (jika ada)
-  const reportSelect = document.getElementById("reportSelect");
+  const hiddenIdInput = document.getElementById("assignTaskId");
+  const titleInput = document.getElementById("assignTaskTitle");
   const prioritySelect = document.getElementById("assignPrioritySelect");
-  if (reportSelect && prioritySelect && reportSelect.value) {
-    const selectedTask = taskCache.find(
-      (task) => task._id === reportSelect.value
+
+  const effectiveTaskId = taskId || currentSelectedTaskId;
+
+  if (!effectiveTaskId) {
+    showNotification(
+      "Pilih laporan terlebih dahulu (buka detail atau gunakan tombol di kartu).",
+      "error"
     );
-    if (selectedTask && selectedTask.priority) {
-      prioritySelect.value = selectedTask.priority;
-    }
+    return;
+  }
+
+  const selectedTask = taskCache.find((task) => task._id === effectiveTaskId);
+  if (!selectedTask) {
+    showNotification("Laporan tidak ditemukan di papan tugas.", "error");
+    return;
+  }
+
+  if (hiddenIdInput) {
+    hiddenIdInput.value = selectedTask._id;
+  }
+  if (titleInput) {
+    titleInput.value = selectedTask.title || "";
+  }
+  if (prioritySelect) {
+    prioritySelect.value = selectedTask.priority || "sedang";
   }
 
   modal.classList.add("active");
@@ -700,11 +722,11 @@ function initForms() {
     assignForm.addEventListener("submit", handleAssignSubmit);
   }
 
-  const assignSelect = document.getElementById("assigneeSelect");
-  if (assignSelect) {
-    assignSelect.innerHTML =
-      '<option value="">Penugasan belum tersedia</option>';
-    assignSelect.disabled = true;
+  const assignPetugasSelect = document.getElementById("assignPetugasSelect");
+  if (assignPetugasSelect) {
+    assignPetugasSelect.innerHTML =
+      '<option value="">Pilih petugas...</option>';
+    assignPetugasSelect.disabled = true;
   }
   const editAssigneeSelect = document.getElementById("editAssigneeSelect");
   if (editAssigneeSelect) {
@@ -722,6 +744,7 @@ async function viewTask(taskId) {
     syncPriorityWithCache(detail);
     document.getElementById("viewModal")?.classList.add("active");
     document.getElementById("viewModal").dataset.taskId = taskId;
+    currentSelectedTaskId = taskId;
     populateViewModal(detail);
   } catch (error) {
     showNotification(error.message || "Gagal memuat detail laporan", "error");
@@ -734,6 +757,7 @@ async function editTask(taskId) {
     const detail = transformLaporanToTask(response.data);
     syncPriorityWithCache(detail);
     populateEditForm(detail);
+    currentSelectedTaskId = taskId;
     document.getElementById("editModal")?.classList.add("active");
   } catch (error) {
     showNotification(error.message || "Gagal memuat data laporan", "error");
@@ -1012,7 +1036,12 @@ async function refreshNotificationBadge() {
     );
     const badge = document.querySelector(".notification-badge");
     if (badge) {
-      badge.textContent = response.data?.count || 0;
+      const rawCount =
+        typeof response.data?.count === "number"
+          ? response.data.count
+          : parseInt(response.data?.count, 10) || 0;
+      const safeCount = Math.max(0, rawCount);
+      badge.textContent = safeCount;
     }
   } catch (error) {
     const badge = document.querySelector(".notification-badge");
@@ -1020,6 +1049,102 @@ async function refreshNotificationBadge() {
       badge.textContent = "0";
     }
   }
+}
+
+// Memuat daftar notifikasi untuk admin dan menghubungkannya dengan kartu laporan
+async function loadNotifications() {
+  const listEl = document.getElementById("notificationList");
+  if (!listEl) {
+    return;
+  }
+
+  listEl.innerHTML =
+    '<div class="notification-empty">Memuat notifikasi...</div>';
+
+  try {
+    const response = await requestJSON(
+      "/api/notifications?recipientType=admin&limit=20"
+    );
+    const notifications = Array.isArray(response.data) ? response.data : [];
+
+    if (!notifications.length) {
+      listEl.innerHTML =
+        '<div class="notification-empty">Belum ada notifikasi</div>';
+      return;
+    }
+
+    const itemsHTML = notifications
+      .map((notif) => buildNotificationItemHTML(notif))
+      .join("");
+    listEl.innerHTML = itemsHTML;
+
+    // pasang handler klik untuk setiap item
+    listEl.querySelectorAll(".notification-item").forEach((itemEl) => {
+      itemEl.addEventListener("click", async () => {
+        const notifId = itemEl.dataset.id;
+        const laporanId = itemEl.dataset.laporanId;
+
+        if (laporanId) {
+          // pastikan kartu ada di papan; jika belum, segarkan dulu
+          const existingCard = document.querySelector(
+            `.task-card[data-task-id="${laporanId}"]`
+          );
+          if (!existingCard) {
+            try {
+              await loadBoardData(currentSearchTerm);
+            } catch (e) {
+              console.warn("Gagal menyegarkan papan tugas:", e.message);
+            }
+          }
+          highlightTaskCard(laporanId);
+        }
+
+        if (notifId) {
+          try {
+            await requestJSON(`/api/notifications/${notifId}/read`, {
+              method: "PATCH",
+            });
+            await refreshNotificationBadge();
+          } catch (e) {
+            console.warn("Gagal menandai notifikasi sebagai dibaca:", e);
+          }
+        }
+
+        const dropdown = document.getElementById("notificationDropdown");
+        if (dropdown) {
+          dropdown.classList.remove("active");
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Gagal memuat notifikasi:", error);
+    listEl.innerHTML =
+      '<div class="notification-empty">Gagal memuat notifikasi</div>';
+  }
+}
+
+function buildNotificationItemHTML(notification) {
+  const isUnread = notification.isRead === false;
+  const laporanId =
+    notification.laporan ||
+    (notification.metadata && notification.metadata.laporanId) ||
+    "";
+  const createdAt = notification.createdAt || notification.updatedAt;
+  const timeText = formatDateTime(createdAt);
+
+  const safeTitle = notification.title || "Notifikasi";
+  const safeMessage = notification.message || "";
+
+  return `
+    <button type="button"
+      class="notification-item ${isUnread ? "notification-item-unread" : ""}"
+      data-id="${notification._id || ""}"
+      data-laporan-id="${laporanId}">
+      <div class="notification-item-title">${safeTitle}</div>
+      <div class="notification-item-message">${safeMessage}</div>
+      <div class="notification-item-meta">${timeText}</div>
+    </button>
+  `;
 }
 
 // helper text & tanggal yang dipakai di beberapa tempat di atas
@@ -1094,29 +1219,40 @@ function formatDateInput(date) {
 
 // memuat daftar petugas ke dalam select "assigneeSelect"
 async function loadPetugasOptions() {
-  const assigneeSelect = document.getElementById("assigneeSelect");
-  if (!assigneeSelect) return;
+  const assignSelect = document.getElementById("assignPetugasSelect");
+  const editAssigneeSelect = document.getElementById("editAssigneeSelect");
 
-  assigneeSelect.disabled = true;
-  assigneeSelect.innerHTML =
-    '<option value="">Memuat daftar petugas...</option>';
+  if (!assignSelect && !editAssigneeSelect) return;
+
+  const targets = [];
+  if (assignSelect) targets.push(assignSelect);
+  if (editAssigneeSelect) targets.push(editAssigneeSelect);
+
+  targets.forEach((el) => {
+    el.disabled = true;
+    el.innerHTML = '<option value="">Memuat daftar petugas...</option>';
+  });
 
   try {
     // SESUAIKAN endpoint ini dengan route petugas di backend Anda
     const response = await requestJSON("/api/petugas");
     const petugasList = Array.isArray(response.data) ? response.data : [];
 
-    assigneeSelect.innerHTML = '<option value="">Pilih petugas...</option>';
-    petugasList.forEach((petugas) => {
-      const option = document.createElement("option");
-      option.value = petugas._id || petugas.id;
-      option.textContent = petugas.nama || petugas.name;
-      assigneeSelect.appendChild(option);
+    targets.forEach((selectEl) => {
+      selectEl.innerHTML = '<option value="">Pilih petugas...</option>';
+      petugasList.forEach((petugas) => {
+        const option = document.createElement("option");
+        option.value = petugas._id || petugas.id;
+        option.textContent = petugas.nama || petugas.name;
+        selectEl.appendChild(option);
+      });
+      selectEl.disabled = false;
     });
-
-    assigneeSelect.disabled = false;
   } catch (error) {
-    assigneeSelect.innerHTML = '<option value="">Gagal memuat petugas</option>';
+    targets.forEach((el) => {
+      el.innerHTML = '<option value="">Gagal memuat petugas</option>';
+      el.disabled = true;
+    });
     showNotification(
       error.message || "Tidak dapat memuat daftar petugas",
       "error"
@@ -1128,10 +1264,10 @@ async function handleAssignSubmit(event) {
   event.preventDefault();
   const form = event.target;
 
-  const laporanId = document.getElementById("reportSelect")?.value;
+  const laporanId = document.getElementById("assignTaskId")?.value;
   const prioritas = document.getElementById("assignPrioritySelect")?.value;
-  const petugasId = document.getElementById("assigneeSelect")?.value;
-  const deadline = document.getElementById("assignDueDate")?.value || null;
+  const petugasId = document.getElementById("assignPetugasSelect")?.value;
+  const deadline = document.getElementById("assignDeadline")?.value || null;
   const catatan = document.getElementById("assignNotes")?.value || "";
   const sendNotification =
     document.getElementById("assignSendNotification")?.checked || false;

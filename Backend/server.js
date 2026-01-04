@@ -11,6 +11,7 @@ import laporanRouter from "./routes/laporanRoute.js";
 import adminRouter from "./routes/adminRoute.js";
 import petugasRouter from "./routes/petugasRoute.js";
 import notificationRouter from "./routes/notificationRoute.js";
+import penugasanRouter from "./routes/penugasanRoute.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use("/api/laporan", laporanRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/petugas", petugasRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/penugasan", penugasanRouter);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../Frontend/index.html"));

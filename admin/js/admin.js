@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadStatistics();
   loadReports();
   loadChartData();
+  refreshNotificationBadge();
 });
 
 // Sidebar & Mobile Menu
@@ -189,14 +190,22 @@ async function loadReports() {
     updateTableInfo(result.pagination);
   } catch (error) {
     console.error("Error loading reports:", error);
-    document.getElementById("submissionsTable").innerHTML =
-      '<tr><td colspan="6" style="text-align: center;">Gagal memuat data laporan</td></tr>';
+    const tbody = document.getElementById("submissionsTable");
+    if (tbody) {
+      tbody.innerHTML =
+        '<tr><td colspan="6" style="text-align: center;">Gagal memuat data laporan</td></tr>';
+    }
   }
 }
 
 // Render Reports Table
 function renderReportsTable(reports) {
   const tbody = document.getElementById("submissionsTable");
+
+  // Jika elemen tabel tidak ada (misalnya di halaman lain), hentikan tanpa error dan tanpa warning
+  if (!tbody) {
+    return;
+  }
 
   if (!reports || reports.length === 0) {
     tbody.innerHTML =
@@ -266,6 +275,9 @@ function renderPagination(pagination) {
   totalPages = pagination.totalPages;
 
   const paginationDiv = document.querySelector(".pagination");
+  if (!paginationDiv) {
+    return;
+  }
   let paginationHTML = "";
 
   // Previous button
@@ -305,9 +317,11 @@ function changePage(page) {
 function updateTableInfo(pagination) {
   const start = (pagination.page - 1) * pagination.limit + 1;
   const end = Math.min(pagination.page * pagination.limit, pagination.total);
-  document.querySelector(
-    ".table-info"
-  ).textContent = `Showing ${start} to ${end} of ${pagination.total} entries`;
+  const infoEl = document.querySelector(".table-info");
+  if (!infoEl) {
+    return;
+  }
+  infoEl.textContent = `Showing ${start} to ${end} of ${pagination.total} entries`;
 }
 
 function filterTable(term) {
@@ -441,9 +455,31 @@ function initPagination() {
 // Click Handlers
 function initClickHandlers() {
   // Notification
-  document.querySelector(".notification-btn")?.addEventListener("click", () => {
-    alert("You have 3 new notifications");
-  });
+  const notifBtn = document.querySelector(".notification-btn");
+  if (notifBtn) {
+    notifBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      // Muat data notifikasi jika fungsi tersedia (misalnya di task-management.js)
+      if (typeof loadNotifications === "function") {
+        loadNotifications();
+      }
+
+      const dropdown = document.getElementById("notificationDropdown");
+      if (dropdown) {
+        dropdown.classList.toggle("active");
+      }
+    });
+
+    // Tutup dropdown jika klik di luar
+    document.addEventListener("click", (e) => {
+      const dropdown = document.getElementById("notificationDropdown");
+      if (!dropdown) return;
+      if (!dropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+        dropdown.classList.remove("active");
+      }
+    });
+  }
 
   // Navigation
   document.querySelectorAll(".nav-item").forEach((link) => {
@@ -486,6 +522,149 @@ async function loadChartData() {
     console.error("Error loading chart data:", error);
   }
 }
+// === Notifikasi Dashboard (lonceng di header) ===
+
+async function refreshNotificationBadge() {
+  const badge = document.querySelector(".notification-badge");
+  if (!badge) return;
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/notifications/unread-count?recipientType=admin`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to load unread notifications");
+
+    const result = await response.json();
+    const count = result?.data?.count || 0;
+    badge.textContent = count;
+  } catch (error) {
+    console.error("Error loading unread notifications:", error);
+    badge.textContent = "0";
+  }
+}
+
+async function loadNotifications() {
+  const listEl = document.getElementById("notificationList");
+  if (!listEl) {
+    return;
+  }
+
+  listEl.innerHTML =
+    '<div class="notification-empty">Memuat notifikasi...</div>';
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/notifications?recipientType=admin&limit=20`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to load notifications");
+
+    const result = await response.json();
+    const notifications = Array.isArray(result.data) ? result.data : [];
+
+    if (!notifications.length) {
+      listEl.innerHTML =
+        '<div class="notification-empty">Belum ada notifikasi</div>';
+      return;
+    }
+
+    const itemsHTML = notifications
+      .map((notif) => buildNotificationItemHTML(notif))
+      .join("");
+    listEl.innerHTML = itemsHTML;
+
+    // pasang handler klik untuk setiap item
+    listEl.querySelectorAll(".notification-item").forEach((itemEl) => {
+      itemEl.addEventListener("click", async () => {
+        const notifId = itemEl.dataset.id;
+        const laporanId = itemEl.dataset.laporanId;
+
+        // Di dashboard: jika fungsi viewReport tersedia, buka detail laporan
+        if (laporanId && typeof viewReport === "function") {
+          try {
+            await viewReport(laporanId);
+          } catch (e) {
+            console.warn("Gagal membuka detail laporan dari notifikasi:", e);
+          }
+        }
+
+        if (notifId) {
+          try {
+            await fetch(`${API_BASE_URL}/notifications/${notifId}/read`, {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+              },
+            });
+            await refreshNotificationBadge();
+          } catch (e) {
+            console.warn("Gagal menandai notifikasi sebagai dibaca:", e);
+          }
+        }
+
+        const dropdown = document.getElementById("notificationDropdown");
+        if (dropdown) {
+          dropdown.classList.remove("active");
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Gagal memuat notifikasi:", error);
+    listEl.innerHTML =
+      '<div class="notification-empty">Gagal memuat notifikasi</div>';
+  }
+}
+
+// Formatter tanggal sederhana untuk tampilan notifikasi di Dashboard
+if (typeof formatDateTime !== "function") {
+  function formatDateTime(date) {
+    if (!date) return "";
+    const d = date instanceof Date ? date : new Date(date);
+    return d.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+}
+
+// Bangun HTML 1 item notifikasi pada dropdown Dashboard
+function buildNotificationItemHTML(notification) {
+  const isUnread = notification.isRead === false;
+  const laporanId =
+    notification.laporan ||
+    (notification.metadata && notification.metadata.laporanId) ||
+    "";
+  const createdAt = notification.createdAt || notification.updatedAt;
+  const timeText = formatDateTime(createdAt);
+
+  const safeTitle = notification.title || "Notifikasi";
+  const safeMessage = notification.message || "";
+
+  return `
+    <button type="button"
+      class="notification-item ${isUnread ? "notification-item-unread" : ""}"
+      data-id="${notification._id || ""}"
+      data-laporan-id="${laporanId}">
+      <div class="notification-item-title">${safeTitle}</div>
+      <div class="notification-item-message">${safeMessage}</div>
+      <div class="notification-item-meta">${timeText}</div>
+    </button>
+  `;
+}
 
 // Logout Function
 function logout() {
@@ -498,5 +677,3 @@ function logout() {
     window.location.href = "login.html";
   }
 }
-
-console.log("Admin Panel loaded");
