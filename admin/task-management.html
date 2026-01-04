@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/table.css">
     <link rel="stylesheet" href="css/task-management.css">
-    <link rel="icon" type="image/png" href="img/67fdchchgc.png">
+    <link rel="icon" type="image/png" href="../img/67fdchchgc.png">
 </head>
 <body class="admin-layout">
     <!-- Sidebar Component -->
@@ -64,10 +64,22 @@
                     <input type="text" id="taskSearch" placeholder="Search tasks...">
                 </div>
 
-                <button class="notification-btn">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="notification-badge">0</span>
-                </button>
+                <!-- Notification Dropdown -->
+                <div class="notification-wrapper">
+                    <button class="notification-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="notification-badge">0</span>
+                    </button>
+                    <div id="notificationDropdown" class="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Notifikasi</h4>
+                            <button class="btn-text" onclick="loadNotifications()">Refresh</button>
+                        </div>
+                        <div id="notificationList" class="notification-list">
+                            <div class="notification-empty">Memuat notifikasi...</div>
+                        </div>
+                    </div>
+                </div>
 
                 <button class="btn-primary" onclick="openAssignModal()">
                     <i class="fa-solid fa-plus"></i>
@@ -99,90 +111,109 @@
             </div>
         </section>
 
-        <!-- Task Board -->
+        <!-- Task Board  Berdasarkan Prioritas-->
         <section class="task-board">
             <!-- Column: Prioritas Tinggi -->
             <div class="task-column column-high">
                 <div class="column-header">
-                    <h3><i class="fa-solid fa-arrow-up"></i> Prioritas: Tinggi</h3>
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Prioritas : Tinggi</h3>
                     <span class="task-count">0</span>
                 </div>
-                <div class="task-list" id="prioritasTinggi"></div>
+                <div class="task-list" id="priorityHigh" data-priority="tinggi"></div>
             </div>
-
             <!-- Column: Prioritas Sedang -->
             <div class="task-column column-medium">
                 <div class="column-header">
-                    <h3><i class="fa-solid fa-minus"></i> Prioritas: Sedang</h3>
-                    <span class="task-count">2</span>
+                    <h3><i class="fa-solid fa-circle-exclamation"></i> Prioritas : Sedang</h3>
+                    <span class="task-count">0</span>
                 </div>
-                <div class="task-list" id="prioritasSedang"></div>
+                <div class="task-list" id="priorityMedium" data-priority="sedang"></div>
             </div>
-
             <!-- Column: Prioritas Rendah -->
             <div class="task-column column-low">
                 <div class="column-header">
-                    <h3><i class="fa-solid fa-arrow-down"></i> Prioritas: Rendah</h3>
-                    <span class="task-count">2</span>
+                    <h3><i class="fa-solid fa-circle-check"></i> Prioritas : Rendah</h3>
+                    <span class="task-count">0</span>
                 </div>
-                <div class="task-list" id="prioritasRendah"></div>
+                <div class="task-list" id="priorityLow" data-priority="rendah"></div>
             </div>
         </section>
     </main>
 
     <!-- Assign Task Modal -->
     <div id="assignModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-md">
             <div class="modal-header">
-                <h2>Tugaskan Laporan</h2>
+                <h3><i class="fa-solid fa-user-plus"></i> Tugaskan Laporan</h3>
+                <button class="modal-close" onclick="closeAssignModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
             </div>
-            <form id="assignTaskForm" class="modal-body">
-                <div class="form-group">
-                    <label for="reportSelect">Pilih Laporan <span class="required">*</span></label>
-                    <select id="reportSelect" required>
-                        <option value="">Pilih laporan...</option>
-                    </select>
-                </div>
+            <form id="assignTaskForm">
+                <input type="hidden" id="assignTaskId" />
+                <div class="modal-body">
+                    <!-- Judul dan Prioritas dalam satu baris -->
+                    <div class="form-row">
+                        <div class="form-group flex-grow">
+                            <label for="assignTaskTitle">
+                                <i class="fa-solid fa-heading"></i> Judul Laporan
+                            </label>
+                            <input type="text" id="assignTaskTitle" readonly class="form-control" />
+                        </div>
+                        <div class="form-group" style="min-width: 180px;">
+                            <label for="assignPrioritySelect">
+                                <i class="fa-solid fa-flag"></i> Level Prioritas
+                            </label>
+                            <select id="assignPrioritySelect" class="form-control">
+                                <option value="tinggi">Prioritas Tinggi</option>
+                                <option value="sedang">Prioritas Sedang</option>
+                                <option value="rendah">Prioritas Rendah</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="assigneeSelect">Tugaskan Ke <span class="required">*</span></label>
-                    <select id="assigneeSelect" required>
-                        <option value="">Pilih petugas...</option>
-                    </select>
-                </div>
+                    <!-- Tugaskan ke -->
+                    <div class="form-group">
+                        <label for="assignPetugasSelect">
+                            <i class="fa-solid fa-user-check"></i> Tugaskan ke (Pilih Petugas)
+                        </label>
+                        <select id="assignPetugasSelect" class="form-control" required>
+                            <option value="">Pilih Petugas...</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="prioritySelect">Level Prioritas <span class="required">*</span></label>
-                    <select id="prioritySelect" required>
-                        <option value="">Pilih prioritas...</option>
-                        <option value="tinggi">Tinggi</option>
-                        <option value="sedang">Sedang</option>
-                        <option value="rendah">Rendah</option>
-                    </select>
-                </div>
+                    <!-- Deadline -->
+                    <div class="form-group">
+                        <label for="assignDeadline">
+                            <i class="fa-solid fa-clock"></i> Deadline Tugas (Batas Waktu)
+                        </label>
+                        <input type="date" id="assignDeadline" class="form-control" required />
+                    </div>
 
-                <div class="form-group">
-                    <label for="dueDate">Batas Waktu</label>
-                    <input type="date" id="dueDate">
-                </div>
+                    <!-- Catatan Tambahan -->
+                    <div class="form-group">
+                        <label for="assignNotes">
+                            <i class="fa-solid fa-note-sticky"></i> Catatan Tambahan
+                        </label>
+                        <textarea id="assignNotes" class="form-control" rows="3" 
+                            placeholder="Tambahkan catatan atau instruksi untuk petugas..."></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="taskNotes">Catatan Tambahan</label>
-                    <textarea id="taskNotes" rows="3" placeholder="Tambahkan catatan atau instruksi khusus..."></textarea>
+                    <!-- Kirim Notifikasi -->
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="assignSendNotification" checked />
+                            <span class="checkmark"></span>
+                            <i class="fa-solid fa-bell"></i> Kirim notifikasi ke petugas
+                        </label>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="sendNotification" checked>
-                        <span>Kirim notifikasi ke petugas</span>
-                    </label>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeAssignModal()">Batal</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        Tugaskan
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAssignModal()">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Tugaskan
                     </button>
                 </div>
             </form>
@@ -279,6 +310,10 @@
                 </div>
 
                 <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="handleDeleteTask()">
+                        <i class="fa-solid fa-trash"></i>
+                        Hapus Laporan
+                    </button>
                     <button type="button" class="btn-secondary" onclick="closeEditModal()">Batal</button>
                     <button type="submit" class="btn-primary">
                         <i class="fa-solid fa-floppy-disk"></i>

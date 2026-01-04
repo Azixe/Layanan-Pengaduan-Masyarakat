@@ -314,13 +314,32 @@ function handlePaginationClick(e) {
 // Load statistics
 async function loadStatistics() {
   try {
-    const response = await fetch(`${API_URL}/statistics`);
-    if (!response.ok) throw new Error("Failed to fetch statistics");
+    // Hitung statistik berdasarkan semua laporan warga yang berhasil diambil
+    const allReports = await fetchAllReports();
 
-    const result = await response.json();
-    if (result.success) {
-      updateStatisticsUI(result.data);
-    }
+    const stats = {
+      total: allReports.length,
+      byStatus: {
+        pending: 0,
+        progress: 0,
+        completed: 0,
+      },
+    };
+
+    allReports.forEach((report) => {
+      const status = (report.status_laporan || "").trim().toLowerCase();
+
+      if (status === "belum dikerjakan") {
+        stats.byStatus.pending += 1;
+      } else if (status === "sedang dikerjakan") {
+        stats.byStatus.progress += 1;
+      } else if (status.startsWith("selesai")) {
+        // Meng-cover "Selesai" atau "Selesai dikerjakan"
+        stats.byStatus.completed += 1;
+      }
+    });
+
+    updateStatisticsUI(stats);
   } catch (error) {
     console.error("Error loading statistics:", error);
   }

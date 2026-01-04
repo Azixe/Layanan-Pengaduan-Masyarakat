@@ -270,7 +270,7 @@ const getLaporanById = async (req, res) => {
   }
 };
 
-// UPDATE STATUS LAPORAN
+// UPDATE STATUS LAPORAN (khusus status & komentar)
 const updateStatusLaporan = async (req, res) => {
   try {
     const { status_laporan, komentar } = req.body;
@@ -307,6 +307,80 @@ const updateStatusLaporan = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in updateStatusLaporan:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// UPDATE LAPORAN (judul, deskripsi, status, komentar)
+const updateLaporan = async (req, res) => {
+  try {
+    const { judul, deskripsi, status_laporan, komentar } = req.body;
+
+    const updateData = {};
+
+    if (typeof judul === "string" && judul.trim() !== "") {
+      updateData.judul = judul.trim();
+    }
+    if (typeof deskripsi === "string" && deskripsi.trim() !== "") {
+      updateData.deskripsi = deskripsi.trim();
+    }
+    if (typeof komentar === "string") {
+      updateData.komentar = komentar;
+    }
+
+    if (status_laporan) {
+      if (
+        !["Belum dikerjakan", "Sedang dikerjakan", "Selesai"].includes(
+          status_laporan
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Status tidak valid. Gunakan: Belum dikerjakan, Sedang dikerjakan, atau Selesai",
+        });
+      }
+      updateData.status_laporan = status_laporan;
+    }
+
+    const laporan = await laporanModel
+      .findByIdAndUpdate(req.params.id, updateData, { new: true })
+      .populate("warga_id", "user_warga email no_hp alamat");
+
+    if (!laporan) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Laporan tidak ditemukan" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Laporan berhasil diperbarui",
+      data: laporan,
+    });
+  } catch (error) {
+    console.error("Error in updateLaporan:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// HAPUS LAPORAN
+const deleteLaporan = async (req, res) => {
+  try {
+    const laporan = await laporanModel.findByIdAndDelete(req.params.id);
+
+    if (!laporan) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Laporan tidak ditemukan" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Laporan berhasil dihapus",
+    });
+  } catch (error) {
+    console.error("Error in deleteLaporan:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -349,5 +423,7 @@ export {
   getAllLaporan,
   getLaporanById,
   updateStatusLaporan,
+  updateLaporan,
+  deleteLaporan,
   getStatistics,
 };

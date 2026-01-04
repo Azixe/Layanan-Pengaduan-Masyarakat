@@ -85,6 +85,29 @@
     border: 2px dashed var(--primary-color);
 }
 
+.task-placeholder {
+    border: 2px dashed rgba(0, 102, 204, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 102, 204, 0.05);
+    height: 80px;
+    transition: height 0.2s ease;
+}
+
+.task-card.drop-animate {
+    animation: cardDrop 0.25s ease;
+}
+
+@keyframes cardDrop {
+    from {
+        transform: scale(0.98);
+        opacity: 0.6;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 /* Task Card */
 .task-card {
     background: white;
@@ -574,6 +597,234 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+}
+
+/* ==================== NOTIFICATION DROPDOWN ==================== */
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 360px;
+  max-height: 480px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.notification-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f3f4;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: #f8f9fa;
+}
+
+.notification-item.unread {
+  background: #e8f4fd;
+  border-left: 3px solid #4dabf7;
+}
+
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-item.unread .notification-icon {
+  background: #4dabf7;
+  color: #fff;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1a1a2e;
+  margin: 0 0 0.25rem;
+}
+
+.notification-message {
+  font-size: 0.8125rem;
+  color: #6c757d;
+  margin: 0 0 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: #adb5bd;
+}
+
+.notification-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* ==================== HIGHLIGHT ANIMATION ==================== */
+@keyframes highlightPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(77, 171, 247, 0.7);
+    border-color: #4dabf7;
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(77, 171, 247, 0);
+    border-color: #228be6;
+  }
+}
+
+.task-card.highlight-new {
+  animation: highlightPulse 0.8s ease-in-out 3;
+  border: 2px solid #4dabf7;
+  background: linear-gradient(135deg, #e8f4fd 0%, #fff 100%);
+}
+
+/* ==================== ASSIGN MODAL ==================== */
+.modal-md {
+  max-width: 560px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.form-row .form-group.flex-grow {
+  flex: 1;
+}
+
+.checkbox-group {
+  margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4dabf7;
+}
+
+/* Assignment info in view modal */
+.detail-assignment {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #4dabf7;
+}
+
+.detail-assignment label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #1a1a2e;
+}
+
+.assignment-info p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.assignment-info strong {
+  color: #1a1a2e;
+}
+
+/* Task card assigned indicator */
+.task-assigned {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #40c057;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #e9ecef;
+}
+
+.task-assigned i {
+  font-size: 0.75rem;
+}
+
+/* Button small variant */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #4dabf7;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
 }
 
 /* Responsive */
